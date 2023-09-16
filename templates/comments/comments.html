@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Comments page
+{% endblock title%}
+
+{% block content %}
+    {% for el in data.post %}
+        <div class="alert alert-dark">
+            <h3> {{ el.title }} </h3>
+            <p> {{ el.text }} </p>
+        </div>
+    {% endfor %}
+
+    {{ data }}
+
+    {% for rv in data.review %}
+        <div class="alert alert-dark">
+            <img src="{{ rv.home_page }}">
+            <h3> {{ rv.user_name }} </h3>
+            <p> {{ rv.created_at }} </p>
+            <p> {{ rv.text }} </p>
+        </div>
+    {% endfor %}
+
+{% endblock content %}

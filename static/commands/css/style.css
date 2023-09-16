@@ -1,0 +1,18 @@
+
+body{
+    background-color: #151d29;
+    color: #89a6c4;
+    margin: 0;
+    font-size:20px;
+}
+
+/*body*/
+.content {
+    margin: 45px;
+}
+
+.text{
+    margin: 10px;
+    text-align: justify;
+}
+
