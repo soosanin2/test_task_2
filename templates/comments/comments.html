@@ -12,15 +12,16 @@
         </div>
     {% endfor %}
 
-    {{ data }}
-
     {% for rv in data.review %}
-        <div class="alert alert-dark">
-            <img src="{{ rv.home_page }}">
-            <h3> {{ rv.user_name }} </h3>
-            <p> {{ rv.created_at }} </p>
-            <p> {{ rv.text }} </p>
-        </div>
-    {% endfor %}
+
+    <div class="alert alert-dark">
+        <h1>{{ rv.user.customuser.avatar }}</h1>
+        <img src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">
+
+        <h3> {{ rv.user.username }} </h3>
+        <p> {{ rv.created_at }} </p>
+        <p> {{ rv.text }} </p>
+    </div>
+{% endfor %}
 
 {% endblock content %}

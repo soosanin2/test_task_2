@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .models import Post, Review, User
+from .models import Post, Review, CustomUser
 
 
 def home(request):
@@ -9,10 +9,13 @@ def home(request):
 
 def news_post(request):
     data = {
+    'avatar': CustomUser.objects.order_by('username'),
     'post': Post.objects.order_by('title'),
-    'review': Review.objects.order_by('user_name'),
+    'review': Review.objects.order_by('user__username'),
     }
+    print(data)
     return render(request, 'comments/comments.html', {'data': data})
+
 
 
 def comm_page(request):
