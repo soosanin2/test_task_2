@@ -4,18 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock title %}</title>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'commands/css/style.css' %}" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
 </head>
-<body>
 
-    <header >
-        <div class="taxt">
-            <h2> Base page </h2>
-         </div>
+
+
+<body>
+    <header class="header-container">
+        <img class="lolo-img" src="{% static 'commands/img/logo.jpg' %}">
+        <span class="logo">Test_task</span>
+        <p></p>
+        <a href="{% url 'home' %}">
+            <div class="h_item"><i class="fa-solid fa-house"></i> Задание </div>
+        </a>
+        <a href="{% url 'comments' %}">
+           <div class="h_item"> <i class="fa-solid fa-newspaper"></i> Решение </div>
+        </a>
+        <a href="{% url 'comments' %}">
+            <button class="btn btn-secondary"> <i class="fas fa-plus-circle"></i> Регистрация </button>
+        </a>
+        <p></p>
     </header>
+    <hr>
+
 
 
     <div class="content">
@@ -24,9 +37,16 @@
         {% endblock content %}
     </div>
 
-    <footer>
-        <hr>
-    </footer>
 
+     <footer>
+        <hr>
+        <div class="footer-container">
+            <div></div>
+            <div class="footer-item">2023 @Adamov</div>
+            <div class="footer-item"><a target="_blank" href="https://github.com/soosanin2">GitHub</a></div>
+            <div class="footer-item"><a target="_blank" href="https://commission.europa.eu/cookies-policy_en">Cookie Policy</a></div>
+            <div></div>
+        </div>
+    </footer>
 </body>
 </html>

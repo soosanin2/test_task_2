@@ -4,7 +4,7 @@ from .models import Post, Review, CustomUser
 
 
 def home(request):
-    return render(request, 'base.html')
+    return render(request, 'home.html')
 
 
 def news_post(request):

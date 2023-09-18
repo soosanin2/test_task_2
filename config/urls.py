@@ -6,7 +6,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('comments.urls')),
-    # path('comments/', include('comments.urls'))
+
 ]
 
 if settings.DEBUG:

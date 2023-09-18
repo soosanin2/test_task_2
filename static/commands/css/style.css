@@ -1,18 +1,162 @@
 
 body{
-    background-color: #151d29;
-    color: #89a6c4;
+    background-color: #f7f2d7;
+    color: #4f4a2f;
     margin: 0;
     font-size:20px;
 }
 
-/*body*/
+/*header*/
+.header-container{
+    display: grid;
+    grid-template-columns:  0.7fr 2fr 4fr 1fr 1fr 1fr 0.5fr;
+    height: 80px;
+    align-items: center;
+}
+
+.lolo-img{
+    margin-left: 15px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 3px solid #f7f2d7;
+    object-fit: cover;
+}
+
+.logo{
+    margin: 20px;
+    font-size: 200%;
+}
+
+.h_item{
+    font-size: 100%;
+    text-align: center;
+    transition: font-size 0.1s;
+    color: #4f4a2f;
+}
+
+.h_item:hover {
+    cursor: pointer;
+    font-size: 120%;
+    color: #736c46;
+}
+
+.header-container > a{
+    text-decoration: none;
+    color: #58a6ff;
+
+}
+
+
+
 .content {
     margin: 45px;
 }
 
-.text{
-    margin: 10px;
-    text-align: justify;
+
+.pdf{
+    child-align: middle;
+    width: 100%;
+    height: 80vh;
+}
+
+/*post*/
+.post{
+
+}
+
+
+/*Comment*/
+.comment-container{
+   margin-left: 30px;
+}
+
+.header-comm {
+    background-color: #e6eaed;
+    display: grid;
+    grid-template-columns: 1fr 3.3fr 2fr 2fr 6fr 1fr ;
+    height: 50px;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 10px;
+
+}
+
+.avatar {
+    margin-left: 5px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 3px solid #f7f2d7;
+    object-fit: cover;
+}
+
+.header-comm a {
+    text-decoration-line: none;
+    color: #4f4a2f;
+}
+
+.header-comm a:hover {
+    text-decoration-line: underline;
+    color: #736c46;
+}
+
+.name-user{
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1;
+    margin: 0 0;
+}
+
+.data-comm{
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 5px;
+    font-size: 14px;
+    line-height: 1;
+
+}
+
+.icon-container {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.icon {
+    font-size: 14px;
+    color: #467ea3;
+    transition: font-size 0.2s;
+}
+
+.icon:hover {
+    font-size: 18px;
+}
+
+
+
+/*footer*/
+
+footer{
+    align-items: center;
+}
+
+.footer-container {
+    margin: 30px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+    align-items: center;
+    text-align: center;
+    height: 20px;
+    cursor: pointer;
+}
+
+.footer-item > a {
+    text-decoration: none;
+    color: #58a6ff;
+}
+
+.footer-item > a:hover {
+    text-decoration: underline;
 }
 

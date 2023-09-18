@@ -1,25 +1,44 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Comments page
+    Решение
 {% endblock title%}
 
 {% block content %}
-    {% for el in data.post %}
-        <div class="alert alert-dark">
-            <h3> {{ el.title }} </h3>
-            <p> {{ el.text }} </p>
-        </div>
-    {% endfor %}
+    <div class="post">
+        {% for el in data.post %}
+            <div>
+                <div class="alert alert-secondary">
+                    <h3> {{ el.title }} </h3>
+                </div>
+                <p> {{ el.text }} </p>
+            </div>
+        {% endfor %}
+    </div>
 
     {% for rv in data.review %}
 
-    <div class="alert alert-dark">
-        <h1>{{ rv.user.customuser.avatar }}</h1>
-        <img src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">
+    <div class="comment-container" >
+        <div class="header-comm">
+            <img class="avatar" src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">
+            {% if rv.home_page %}
+                <a href="{{ rv.home_page }}">
+                    <h3 class="name-user">{{ rv.user.first_name }} {{  rv.user.last_name  }} </h3>
+                </a>
+            {% else %}
+                <h3 class="name-user">{{ rv.user.first_name }} {{  rv.user.last_name  }} </h3>
+            {% endif %}
+            <p class="data-comm"> {{ rv.created_at|date:"d.m.y" }} в {{ rv.created_at|date:"H:i" }} </p>
+            <div class="icon-container">
+                <i class="fa-solid fa-hashtag icon"></i>
+                <i class="fa-regular fa-bookmark icon"></i>
+                <i class="fa-solid fa-code-branch icon"></i>
+                <i class="fa-regular fa-circle-up icon"></i>
 
-        <h3> {{ rv.user.username }} </h3>
-        <p> {{ rv.created_at }} </p>
+            </div>
+            <p></p>
+            <p>rating</p>
+        </div>
         <p> {{ rv.text }} </p>
     </div>
 {% endfor %}
