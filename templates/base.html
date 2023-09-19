@@ -17,13 +17,16 @@
         <span class="logo">Test_task</span>
         <p></p>
         <a href="{% url 'home' %}">
-            <div class="h_item"><i class="fa-solid fa-house"></i> Задание </div>
+            <div class="h_item"><i class="fa-solid fa-house"></i> Главная </div>
         </a>
-        <a href="{% url 'comments' %}">
-           <div class="h_item"> <i class="fa-solid fa-newspaper"></i> Решение </div>
+        <a href="{% url 'task' %}">
+           <div class="h_item"> <i class="fa-solid fa-newspaper"></i> Задание </div>
         </a>
-        <a href="{% url 'comments' %}">
-            <button class="btn btn-secondary"> <i class="fas fa-plus-circle"></i> Регистрация </button>
+        <a href="{% url 'create_post' %}">
+            <button class="btn btn-secondary">  Добавить пост </button>
+        </a>
+        <a href="{% url 'admin:login' %}?next={% url 'admin:index' %}">
+            <button class="btn btn-secondary"> Войти </button>
         </a>
         <p></p>
     </header>
@@ -43,7 +46,7 @@
         <div class="footer-container">
             <div></div>
             <div class="footer-item">2023 @Adamov</div>
-            <div class="footer-item"><a target="_blank" href="https://github.com/soosanin2">GitHub</a></div>
+            <div class="footer-item"><a target="_blank" href="https://github.com/soosanin2/test_task">GitHub</a></div>
             <div class="footer-item"><a target="_blank" href="https://commission.europa.eu/cookies-policy_en">Cookie Policy</a></div>
             <div></div>
         </div>

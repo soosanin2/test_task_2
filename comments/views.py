@@ -1,27 +1,39 @@
-from django.shortcuts import render
-
-from .models import Post, Review, CustomUser
-
+from django.shortcuts import render, redirect
+from .models import Post, Commentary, CustomUser
+from .forms import PostForm
 
 def home(request):
-    return render(request, 'home.html')
-
-
-def news_post(request):
     data = {
-    'avatar': CustomUser.objects.order_by('username'),
-    'post': Post.objects.order_by('title'),
-    'review': Review.objects.order_by('user__username'),
+    # 'avatar': CustomUser.objects.order_by('username'),
+    'avatar': CustomUser.objects.all(),
+    # 'post': Post.objects.order_by('title'),
+    'post': Post.objects.order_by('-created_at'),
+    # 'commentary': Commentary.objects.order_by('user__username'),
+        # User Name, E-mail, -created_at (как в порядке убывания, так и в обратном)
+    'commentary': Commentary.objects.order_by('-created_at'),
     }
     print(data)
-    return render(request, 'comments/comments.html', {'data': data})
+    return render(request, 'comments/home.html', {'data': data})
 
 
+def task(request):
+    return render(request, 'comments/task.html')
 
-def comm_page(request):
+def create_post(request):
+    error = ''
+
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        else:
+            error = 'Введены не коректные данные'
+
+    form = PostForm()
     data = {
-        'comm_title': 'Lorem ipsum',
-        'comm_text': 'Lorem ipsum dolor sit amet.'
+        'form': form,
+        'error': error
     }
-    return render(request, 'comments/comments.html', data)
+    return render(request, 'comments/create_post.html', data)
 

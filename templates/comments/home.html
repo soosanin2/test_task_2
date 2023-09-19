@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Главная
+{% endblock title%}
+
+{% block content %}
+    <div>
+        {% if data.post %}
+            {% for el in data.post %}
+                <div class="post">
+                    <div class="alert alert-secondary">
+                        <h3> {{ el.title }} </h3>
+
+                        <h4  style="text-align: right;" > {{ el.author }}</h4>
+                    </div>
+                    <p class="text-post"> {{ el.text }} </p>
+                    <a href="{% url 'home' %}">
+                        <button class="btn btn-secondary">  Добавить комментарий </button>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-secondary">
+                <h3> Нет новостей </h3>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if data.commentary %}
+        {% for rv in data.commentary %}
+        <div class="comment-container" >
+            <div class="header-comm">
+                <img class="avatar" src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">
+                {% if rv.home_page %}
+                    <a href="{{ rv.home_page }}">
+                        <h3 class="name-user"> {{  rv.user.username }} </h3>
+                    </a>
+                {% else %}
+                    <h3 class="name-user"> {{  rv.user.username }} </h3>
+                {% endif %}
+                <p class="data-comm"> {{ rv.created_at|date:"d.m.y" }} в {{ rv.created_at|date:"H:i" }} </p>
+                <div class="icon-container">
+                    <i class="fa-solid fa-hashtag icon"></i>
+                    <i class="fa-regular fa-bookmark icon"></i>
+                    <i class="fa-solid fa-code-branch icon"></i>
+                    <i class="fa-regular fa-circle-up icon"></i>
+
+                </div>
+                <p></p>
+                <p>rating</p>
+            </div>
+            <p class="comm-text"> {{ rv.text }} </p>
+            <a href="{% url 'home' %}">
+                <button class="btn btn-secondary"> Ответить </button>
+            </a>
+
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="comment-container" >
+            <p> Нет комментариев </p>
+        </div>
+    {% endif %}
+
+
+{% endblock content %}

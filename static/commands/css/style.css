@@ -9,7 +9,7 @@ body{
 /*header*/
 .header-container{
     display: grid;
-    grid-template-columns:  0.7fr 2fr 4fr 1fr 1fr 1fr 0.5fr;
+    grid-template-columns:  0.7fr 2fr 3fr 1fr 1fr 1fr 1fr 0.2fr;
     height: 80px;
     align-items: center;
 }
@@ -48,7 +48,6 @@ body{
 }
 
 
-
 .content {
     margin: 45px;
 }
@@ -62,7 +61,24 @@ body{
 
 /*post*/
 .post{
+    margin-bottom: 30px;
+    background-color: #f7e2be;
+    border-radius: 7px;
+}
 
+.post button{
+    margin-left: 50px;
+    margin-bottom: 15px;
+}
+
+.text-post{
+    margin: 15px;
+    text-align: justify;
+}
+
+.alert.alert-secondary{
+    display: grid;
+    grid-template-columns: 5fr 1fr ;
 }
 
 
@@ -79,7 +95,6 @@ body{
     align-items: center;
     margin-top: 50px;
     margin-bottom: 10px;
-
 }
 
 .avatar {
@@ -133,6 +148,15 @@ body{
     font-size: 18px;
 }
 
+.comment-container button{
+    margin-left: 50px;
+    margin-bottom: 15px;
+}
+
+.comm-text{
+    margin: 15px;
+    text-align: justify;
+}
 
 
 /*footer*/
