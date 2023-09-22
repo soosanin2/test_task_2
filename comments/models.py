@@ -15,9 +15,15 @@ def user_file_path(instance, filename):
     else:
         pass
 
+# def binding_com(instanse):
+#     binding = int(instanse.post.id)
+#     return
+
+
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    home_page = models.URLField(max_length=255, blank=True, null=True, verbose_name="Home Page", )
 
     def __str__(self):
         return self.username
@@ -29,7 +35,7 @@ class CustomUser(AbstractUser):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -42,30 +48,17 @@ class Post(models.Model):
         verbose_name_plural = "Posts"
 
 
-
-
 class Commentary(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # Поле для зв'язку з користувачем
-    user_name = models.CharField(max_length=255, verbose_name="User Name", blank=True)
-    email = models.EmailField(max_length=100, blank=True)
-    home_page = models.URLField(max_length=255, blank=True, null=True, verbose_name="Home Page",)
+    binding = models.IntegerField(verbose_name="Binding")
+    binding_com = models.IntegerField(verbose_name="Binding_com", blank=True, null=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     your_file = models.FileField(upload_to=user_file_path, blank=True, null=True, verbose_name="Your File")
     captcha = models.CharField(max_length=255, verbose_name="Captcha")
     text = models.TextField(verbose_name="Text")
     created_at = models.DateTimeField(auto_now_add=True)
-    # id_for_post
-    # parents_id
 
     def __str__(self):
-        return self.user_name
-
-    def save(self, *args, **kwargs):
-        if not self.user_name:
-            self.user_name = self.user.first_name + " " + self.user.last_name
-        if not self.email:
-            self.email = self.user.email
-
-        super().save(*args, **kwargs)
+        return self.user.username
 
     class Meta:
         verbose_name = "Commentary"

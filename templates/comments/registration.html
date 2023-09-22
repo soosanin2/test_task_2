@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Регистрация
+{% endblock title%}
+
+{% block content %}
+    <div class="form-create-post">
+        <h3> Регистрация </h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ form.avatar }}
+            <p> Ваш аватар </p>
+            {{ form.username }}
+            <p>Введите оригинальное имя, имя что уже используется выведет ошибку</p>
+            {{ form.email }}<br>
+            {{ form.password1 }}
+            {{ form.password2 }}
+
+            <p>Минимальная длинна пароля 8 символов. Пароль не должен быть очевидным.</p>
+            <p>В пароле должна быть минимум 1 цифра. Пароль не должен быть похожим на атрибуты пользователя.<p>
+
+            <span>{{ error }}</span> <br>
+
+            <button class="btn btn-success" type="submit">Регистрация</button>
+        </form>
+    </div>
+{% endblock content %}
+
