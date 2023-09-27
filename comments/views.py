@@ -1,18 +1,34 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from rest_framework.viewsets import ModelViewSet
+
 from .models import Post, Commentary, CustomUser
 from .forms import PostForm, RegistrationForm, CommentaryForm
 from collections import defaultdict
 
+from .serializers import PostSerializer, CommentarySerializer
+
+
+class PostView(ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+def post_app(request):
+    return render(request, 'comments/post_app.html')
+
+
+class CommentaryView(ModelViewSet):
+    queryset = Commentary.objects.all()
+    serializer_class = CommentarySerializer
+
 
 def home(request):
-
     data = {
-    'avatar': CustomUser.objects.all(),
-    'post': Post.objects.order_by('-created_at'),
-    'commentary': Commentary.objects.order_by('-created_at'),
-    'fdata': submit_comment(request),
-
+        'avatar': CustomUser.objects.all(),
+        'post': Post.objects.order_by('-created_at'),
+        'commentary': Commentary.objects.order_by('-created_at'),
+        'fdata': submit_comment(request),
 
     }
     print(data)
