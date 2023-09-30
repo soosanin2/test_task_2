@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Редактор
+{% endblock title %}
+
+{% block content %}
+
+    <br>
+    {% if update %}
+        <p> Страница редактирования </p>
+        <br>
+        <div>
+            <form id="update_article" method="post">
+                {% csrf_token %}
+                {{ form }}
+            </form>
+        </div>
+        <button class="btn btn-secondary" form="update_article" type="submit">Обновить статью</button>
+        <a href="{% url 'home' %}">
+            <button class="btn btn-secondary">Назад</button>
+        </a>
+
+    {% else %}
+        <button class="btn btn-secondary" id="myButton">Добавить статью</button>
+        <br>
+        <br>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Дата</th>
+                <th scope="col">Название</th>
+                <th scope="col">Автрор</th>
+                <th scope="col"> Редактировать</th>
+                <th scope="col">Удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in list_articles %}
+                <tr>
+                    <td>{{ i.created_at|date:"Y.m.d" }} в {{ i.created_at|time:"H:i" }}</td>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.author }}</td>
+                    <td>
+                        {% if request.user == i.author %}
+                            <a href="{% url 'update_page' i.id %}">Редактировать</a></td>
+                        {% else %}
+                            <a style="color: red;"><strong>Нет доступа</strong></a>
+                        {% endif %}
+                    <td>
+
+                        {% if request.user == i.author %}
+                            <form id="delete_form{{ i.id }}" action="{% url 'delete_page' i.id %}"
+                                  method="post">{% csrf_token %}</form>
+                            <a href="javascript:void(0);" data-id="{{ i.id }}" class="delete-link">Удалить</a>
+                        {% else %}
+                            <a style="color: red;"><strong>Нет доступа</strong></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    {% endif %}
+
+
+
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <div class="form-create-post">
+                <h3> Комментарий </h3>
+                <div>
+                    <form id="add_form" method="post">
+                        {% csrf_token %}
+                        {{ form }}
+                    </form>
+                </div>
+                <button class="btn btn-secondary" form="add_form" type="submit">Добавить статью</button>
+
+            </div>
+            <br>
+            <button id="closePopup" class="btn btn-secondary">Закрыть</button>
+        </div>
+    </div>
+
+
+{% endblock content %}

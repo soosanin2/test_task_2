@@ -4,9 +4,104 @@
 
 {% block title %}
     Главная
-{% endblock title%}
+{% endblock title %}
 
 {% block content %}
+
+
+
+
+    <div>
+        {% if list_articles %}
+            {% for el in list_articles %}
+                <div>
+                    <div id="{{ el.id }}" class="post">
+                        <div class="alert alert-secondary">
+                            <h3> {{ el.title }} </h3>
+                            <h4 style="text-align: right;"> {{ el.author }}</h4>
+                        </div>
+
+                        <p class="text-post"> {{ el.text }} </p>
+
+                        <a href="/detail/{{el.id}}"><button class="btn btn-secondary">Перейти к статье</button></a>
+
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-secondary">
+                <h3> Нет новостей </h3>
+            </div>
+        {% endif %}
+    </div>
+
+
+
+    {#    <div>#}
+    {##}
+    {#        {% for el in data.post %}#}
+    {#            <div id="{{ el.id }}" class="post">#}
+    {#                <div class="alert alert-secondary">#}
+    {#                    <h3> {{ el.title }} </h3>#}
+    {#                </div>#}
+    {#                <button data-binding="{{ el.id }}" class="btn btn-secondary open-popup"> Коментировать</button>#}
+    {#            </div>#}
+    {#            <div class="back-com">#}
+    {#                {% for rv in data.commentary %}#}
+    {#                    {% if rv.binding == el.id %}#}
+    {#                        <div id="{{ rv.id }}" class="comment-container">#}
+    {#                            {% if rv.binding_com != None %}#}
+    {#                                {% for prv in data.commentary %}#}
+    {#                                    {% if prv.id == rv.binding_com %}#}
+    {#                                        <p class="back-com-par"> {{ prv.text }}</p>#}
+    {#                                    {% endif %}#}
+    {#                                {% endfor %}#}
+    {#                            {% endif %}#}
+    {#                            <p class="comm-text"> {{ rv.text }} </p>#}
+    {#                            <button data-binding="{{ el.id }}" data-binding-com="{{ rv.id }}"#}
+    {#                                    class="btn btn-secondary open-popup"> Ответить#}
+    {#                            </button>#}
+    {#                        </div>#}
+    {#                    {% endif %}#}
+    {#                {% endfor %}#}
+    {#            </div>#}
+    {#        {% endfor %}#}
+    {#    </div>#}
+
+
+
+
+
+
+
+{#        <div>#}
+{#            <h2> Posts </h2>#}
+{#            {% verbatim %}#}
+{#            <div class="container" id="post_app">#}
+{##}
+{#                <div class="post" v-for="post in posts">#}
+{#                    <div class="alert alert-secondary">#}
+{#                        <h3> {{ post.title }} </h3>#}
+{#                        <h4 style="text-align: right;"> {{ post.author_username }}</h4>#}
+{#                    </div>#}
+{#                    <p class="text-post"> {{ post.text }} </p>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#            {% endverbatim %}#}
+{#            <h2> Commentaries </h2>#}
+{##}
+{##}
+{#            {% verbatim %}#}
+{#            <div class="container" id="comm_app">#}
+{#                <div v-for="commentary in commentaries">#}
+{#                    <p>{{ commentary.id }}</p>#}
+{#                    <p>{{ commentary.id_list }}</p>#}
+{#                </div>#}
+{#            </div>#}
+{#            {% endverbatim %}#}
+{#        </div>#}
+
 
     <div id="myPopup" class="popup">
         <div class="popup-content">
@@ -19,122 +114,19 @@
                     {{ data.fdata.form.captcha }}<br>
                     {{ data.fdata.form.text }}<br>
                     <span>{{ error }}</span>
-                    <button class="btn btn-secondary" id = 'submitComit' type="submit" >Оставить комментарий</button>
+                    <button class="btn btn-secondary" id='submitComit' type="submit">Оставить комментарий</button>
                 </form>
             </div>
             <br>
-            <button id="closePopup" class="btn btn-secondary" >Закрыть</button>
+            <button id="closePopup" class="btn btn-secondary">Закрыть</button>
         </div>
     </div>
 
-    <div>
-        {% if data.post %}
-            {% for el in data.post %}
-                <div id="{{ el.id }}" class="post">
-                    <div class="alert alert-secondary">
-                        <h3> {{ el.title }} </h3>
-                        <h4  style="text-align: right;" > {{ el.author }}</h4>
-                    </div>
-
-                    <p class="text-post"> {{ el.text }} </p>
-
-                    <button data-binding="{{ el.id }}" class="btn btn-secondary open-popup"> Коментировать </button>
-                </div>
-
-                <div class="back-com" >
-                    {% if data.commentary %}
-                        {% for rv in data.commentary %}
-
-                            {% if rv.binding == el.id %}
-
-                                <div id="{{ rv.id }}" class="comment-container" >
-                                    <div class="header-comm">
-                                        <img class="avatar" src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">
-                                        {% if rv.user.home_page %}
-                                            <a href="{{ rv.user.home_page }}">
-                                                <h3 class="name-user"> {{  rv.user.username }} </h3>
-                                            </a>
-                                        {% else %}
-                                            <h3 class="name-user"> {{  rv.user.username }} </h3>
-                                        {% endif %}
-                                        <p class="data-comm"> {{ rv.created_at|date:"d.m.y" }} в {{ rv.created_at|date:"H:i" }} </p>
-                                        <div class="icon-container">
-                                            <i class="fa-solid fa-hashtag icon"></i>
-                                            <i class="fa-regular fa-bookmark icon"></i>
-                                            <i class="fa-solid fa-code-branch icon"></i>
-                                            <i class="fa-regular fa-circle-up icon"></i>
-                                        </div>
-                                        <p></p>
-                                        <p>rating</p>
-                                    </div>
-
-                                    {% if rv.binding_com != None %}
-                                        {% for prv in data.commentary%}
-                                            {% if prv.id == rv.binding_com %}
-                                                <p class="back-com-par"> родительский ком - {{ prv.text }}</p>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-
-                                    <p class="comm-text"> {{ rv.text }} </p>
-                                    <button data-binding="{{ el.id }}" data-binding-com="{{ rv.id }}"   class="btn btn-secondary open-popup"> Ответить </button>
-
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-
-                    {% else %}
-                        <div class="comment-container" >
-                            <p> Нет комментариев </p>
-                        </div>
-                    {% endif %}
-                </div>
-
-            {% endfor %}
-        {% else %}
-            <div class="alert alert-secondary">
-                <h3> Нет новостей </h3>
-            </div>
-        {% endif %}
-    </div>
 
 
 
 
-{#    <div>#}
-{#        {% if data.commentary %}#}
-{#            {% for rv in data.commentary %}#}
-{#                <div id="{{ rv.id }}" class="comment-container" >#}
-{#                    <div class="header-comm">#}
-{#                        <img class="avatar" src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">#}
-{#                        {% if rv.user.home_page %}#}
-{#                            <a href="{{ rv.user.home_page }}">#}
-{#                                <h3 class="name-user"> {{  rv.user.username }} </h3>#}
-{#                            </a>#}
-{#                        {% else %}#}
-{#                            <h3 class="name-user"> {{  rv.user.username }} </h3>#}
-{#                        {% endif %}#}
-{#                        <p class="data-comm"> {{ rv.created_at|date:"d.m.y" }} в {{ rv.created_at|date:"H:i" }} </p>#}
-{#                        <div class="icon-container">#}
-{#                            <i class="fa-solid fa-hashtag icon"></i>#}
-{#                            <i class="fa-regular fa-bookmark icon"></i>#}
-{#                            <i class="fa-solid fa-code-branch icon"></i>#}
-{#                            <i class="fa-regular fa-circle-up icon"></i>#}
-{#                        </div>#}
-{#                        <p></p>#}
-{#                        <p>rating</p>#}
-{#                    </div>#}
-{##}
-{#                    <p class="comm-text"> {{ rv.text }} </p>#}
-{##}
-{#                    <button class="btn btn-secondary open-popup"> Ответить </button>#}
-{#                </div>#}
-{#            {% endfor %}#}
-{##}
-{#        {% else %}#}
-{#            <div class="comment-container" >#}
-{#                <p> Нет комментариев </p>#}
-{#            </div>#}
-{#        {% endif %}#}
-{#    </div>#}
+
+
+
 {% endblock content %}

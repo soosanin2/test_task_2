@@ -1,30 +1,49 @@
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 
-from django.contrib.auth.forms import UserCreationForm
 from .models import Post, CustomUser, Commentary
-from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInput, ImageField, forms
+from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInput, ImageField
+
+
+class AuthUserForm(AuthenticationForm, ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'password')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
 
 
 class CommentaryForm(ModelForm):
     class Meta:
         model = Commentary
-        fields = ['captcha', 'text', 'binding', 'binding_com']
 
-        widgets = {
-            'binding': TextInput(attrs={
-                'class': 'binding',
-            }),
-            'binding_com': TextInput(attrs={
-                'class': 'binding',
-            }),
-            'captcha': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Капча"
-            }),
-            'text':  TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Коментарий"
-            }),
-        }
+        fields = ('binding_com', 'captcha', 'text', 'your_file',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+class RegisterUserForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'password')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
 
 
 class PostForm(ModelForm):
@@ -42,32 +61,3 @@ class PostForm(ModelForm):
                 'placeholder': "Текст статьи"
             }),
         }
-
-
-class RegistrationForm(UserCreationForm):
-    # model = forms.EmailField(max_length=254, help_text='Обов\'язкове поле. Введіть правильну email адресу.')
-    avatar = ImageField(required=False)  # Додайте поле для аватарки з параметром required=False
-
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2', 'avatar' )
-
-        widgets = {
-            "username": TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Имя"
-            }),
-            "email": EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': "email"
-            }),
-            "password1": PasswordInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Придумайте пароль"
-            }),
-            "password2": PasswordInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Повторите пароль"
-            }),
-        }
-

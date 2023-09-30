@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Авторизация
+{% endblock title %}
+
+{% block content %}
+    <p> Страница авторизации </p>
+
+
+    <div class="post-container">
+        <div id="{{ get_article.id }}" class="post">
+            <div>
+                <form id="login_form" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                </form>
+            </div>
+            <br>
+            <button class="btn btn-secondary" form="login_form" type="submit">Войти</button>
+            <a href="{% url 'home' %}">
+                <button class="btn btn-secondary">Назад</button>
+            </a>
+        </div>
+    </div>
+
+{% endblock content %}

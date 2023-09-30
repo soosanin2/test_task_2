@@ -1,51 +1,55 @@
 
-body{
+body {
     background-color: #f7f2d7;
     color: #4f4a2f;
     margin: 0;
-    font-size:20px;
+    font-size: 20px;
 }
 
 /*popup*/
 .popup {
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-        display: none;
-    }
-    .popup-content {
-        background-color: white;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #888888;
-        width: 30%;
-        font-weight: bolder;
-    }
-    .popup-content button {
-        display: block;
-        margin: 0 auto;
-    }
-    .show {
-        display: block;
-    }
-    h1 {
-        color: green;
-    }
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.popup-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888888;
+    width: 30%;
+    font-weight: bolder;
+}
+
+.popup-content button {
+    display: block;
+    margin: 0 auto;
+}
+
+.show {
+    display: block;
+}
+
+h1 {
+    color: green;
+}
 
 /*header*/
-.header-container{
+.header-container {
     display: grid;
-    grid-template-columns:  0.7fr 2fr 3fr 1fr 1fr 1fr 1fr 0.2fr;
+    grid-template-columns:  0.7fr 1.4fr 1.6fr 1fr 1fr 1fr 1.5fr 0.8fr 0.8fr 0.2fr;
     height: 80px;
     align-items: center;
 }
 
-.lolo-img{
+.lolo-img {
     margin-left: 15px;
     width: 75px;
     height: 75px;
@@ -54,12 +58,12 @@ body{
     object-fit: cover;
 }
 
-.logo{
+.logo {
     margin: 20px;
     font-size: 200%;
 }
 
-.h_item{
+.h_item {
     font-size: 100%;
     text-align: center;
     transition: font-size 0.1s;
@@ -72,7 +76,7 @@ body{
     color: #736c46;
 }
 
-.header-container > a{
+.header-container > a {
     text-decoration: none;
     color: #58a6ff;
 
@@ -84,43 +88,44 @@ body{
 }
 
 
-.pdf{
+.pdf {
     child-align: middle;
     width: 100%;
     height: 80vh;
 }
 
 /*post*/
-.post{
+.post {
+    margin: 0 auto;
+    width: 100vh;
     margin-bottom: 30px;
     background-color: #f7e2be;
     border-radius: 7px;
 }
 
-.post button{
+.post button {
     margin-left: 50px;
     margin-bottom: 15px;
 }
 
-.text-post{
+.text-post {
     margin: 15px;
     text-align: justify;
 }
 
-.alert.alert-secondary{
+.alert.alert-secondary {
     display: grid;
-    grid-template-columns: 5fr 1fr ;
+    grid-template-columns: 5fr 1fr;
 }
 
 
 /*Comment*/
-.comment-container{
-   margin-left: 30px;
+.comment-container {
+    /*margin-left: 30px;*/
 }
 
 
-
-.binding{
+.binding {
     /*display: none;*/
 }
 
@@ -136,19 +141,27 @@ body{
 
 
 .back-com {
+    margin: 0 auto;
+    width: 100vh;
+    margin-bottom: 30px;
+    /*background-color: #f7e2be;*/
+    /*border-radius: 7px;*/
     background-color: #58a6ff;
-    margin-left: 30px;
+    border-radius: 7px;
+    /*border: 1px solid #ccc;*/
+
 }
 
 .header-comm {
     background-color: #e6eaed;
     display: grid;
-    grid-template-columns: 1fr 3.3fr 2fr 2fr 6fr 1fr ;
+    grid-template-columns: 1fr 3fr 4fr 2fr 6fr 1fr 0.3fr;
     height: 50px;
     align-items: center;
     margin-top: 50px;
     margin-bottom: 10px;
-    margin-right: 20px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
 }
 
 .avatar {
@@ -170,14 +183,14 @@ body{
     color: #736c46;
 }
 
-.name-user{
+.name-user {
     font-weight: bold;
     font-size: 16px;
     line-height: 1;
     margin: 0 0;
 }
 
-.data-comm{
+.data-comm {
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 5px;
@@ -202,12 +215,12 @@ body{
     font-size: 18px;
 }
 
-.comment-container button{
+.comment-container button {
     margin-left: 50px;
     margin-bottom: 15px;
 }
 
-.comm-text{
+.comm-text {
     margin: 15px;
     text-align: justify;
 }
@@ -215,7 +228,7 @@ body{
 
 /*footer*/
 
-footer{
+footer {
     align-items: center;
 }
 

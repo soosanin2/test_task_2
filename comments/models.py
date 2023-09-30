@@ -15,11 +15,6 @@ def user_file_path(instance, filename):
     else:
         pass
 
-# def binding_com(instanse):
-#     binding = int(instanse.post.id)
-#     return
-
-
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
@@ -35,13 +30,14 @@ class CustomUser(AbstractUser):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="author_article", blank=True, null=True, )
+
     title = models.CharField(max_length=200)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return '%s %s' % (self.author, self.title)
 
     class Meta:
         verbose_name = "Post"
@@ -49,22 +45,20 @@ class Post(models.Model):
 
 
 class Commentary(models.Model):
-    binding = models.IntegerField(verbose_name="Binding")
+    article = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name="Article", blank=True, null=True,
+                                related_name='comments_articles')
     binding_com = models.IntegerField(verbose_name="Binding_com", blank=True, null=True)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    # user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="author_article", blank=True, null=True)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="author_article", blank=True, null=True)
     your_file = models.FileField(upload_to=user_file_path, blank=True, null=True, verbose_name="Your File")
     captcha = models.CharField(max_length=255, verbose_name="Captcha")
     text = models.TextField(verbose_name="Text")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.text
 
     class Meta:
         verbose_name = "Commentary"
         verbose_name_plural = "Commentarys"
-
-
-
-
 

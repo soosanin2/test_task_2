@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ get_article.title }}
+{% endblock title %}
+
+{% block content %}
+
+
+    <div>
+
+        <div class="post-container">
+            <div class="post">
+                <div class="alert alert-secondary">
+                    <h3> {{ get_article.title }} </h3>
+                    <h4 style="text-align: right;"> {{ get_article.author }}</h4>
+                </div>
+
+                <p class="text-post"> {{ get_article.text }} </p>
+
+                <button id="myButton" data-binding="{{ get_article.id }}" class="btn btn-secondary open-popup">
+                    Коментировать
+                </button>
+                <a href="{% url 'home' %}">
+                    <button class="btn btn-secondary">Назад</button>
+                </a>
+                <p> Коментариев: {{ get_article.comments_articles.all.count }}</p>
+            </div>
+
+            <div >
+
+                {% for comm in get_article.comments_articles.all %}
+                    <div class="back-com">
+
+                    <div id="{{ comm.id }}" class="comment-container">
+                        <div class="header-comm">
+                            <img class="avatar" src="{{ comm.author.get_avatar_url }}" alt="Avatar"
+                                 width="50">
+                            <h3 class="name-user"> {{ comm.author}} </h3>
+                            <p class="data-comm"> {{ comm.created_at|date:"d.m.y" }}
+                                в {{ comm.created_at|date:"H:i" }} </p>
+                            <div class="icon-container">
+                                <i class="fa-solid fa-hashtag icon"></i>
+                                <i class="fa-regular fa-bookmark icon"></i>
+                                <i class="fa-solid fa-code-branch icon"></i>
+                                <i class="fa-regular fa-circle-up icon"></i>
+                            </div>
+                            <p></p>
+                            <p>rating</p>
+                            <p></p>
+                        </div>
+                        <p class="comm-text"> {{ comm.text }} </p>
+                        <button data-binding="{{ el.id }}" data-binding-com="{{ comm.id }}"
+                                class="btn btn-secondary open-popup"> Ответить
+                        </button>
+                    </div>
+                    </div>
+
+                {% endfor %}
+
+
+            </div>
+{#            <div class="back-com">#}
+{##}
+{#                {% for comm in get_article.author_article.all %}#}
+{##}
+{#                    <div id="{{ comm.id }}" class="comment-container">#}
+{#                        <div class="header-comm">#}
+{#                            <img class="avatar" src="{{ comm.user.get_avatar_url }}" alt="Avatar"#}
+{#                                 width="50">#}
+{#                            <h3 class="name-user"> {{ comm.user}} </h3>#}
+{#                            <p class="data-comm"> {{ comm.created_at|date:"d.m.y" }}#}
+{#                                в {{ comm.created_at|date:"H:i" }} </p>#}
+{#                            <div class="icon-container">#}
+{#                                <i class="fa-solid fa-hashtag icon"></i>#}
+{#                                <i class="fa-regular fa-bookmark icon"></i>#}
+{#                                <i class="fa-solid fa-code-branch icon"></i>#}
+{#                                <i class="fa-regular fa-circle-up icon"></i>#}
+{#                            </div>#}
+{#                            <p></p>#}
+{#                            <p>rating</p>#}
+{#                        </div>#}
+{#                        <p class="comm-text"> {{ comm.text }} </p>#}
+{#                        <button data-binding="{{ el.id }}" data-binding-com="{{ comm.id }}"#}
+{#                                class="btn btn-secondary open-popup"> Ответить#}
+{#                        </button>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+
+        </div>
+
+    </div>
+
+
+
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <div class="form-create-post">
+                <h3> Комментарий </h3>
+                <div>
+                    <form id="add_form" method="post">
+                        {% csrf_token %}
+                        {{ form }}
+                    </form>
+                </div>
+                <button class="btn btn-secondary" form="add_form" type="submit">Добавить статью</button>
+
+            </div>
+            <br>
+            <button id="closePopup" class="btn btn-secondary">Закрыть</button>
+        </div>
+    </div>
+
+{% endblock content %}
