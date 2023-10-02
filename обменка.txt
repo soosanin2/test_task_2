@@ -1,0 +1,231 @@
+#
+# def home(request):
+#     data = {
+#     'avatar': CustomUser.objects.all(),
+#     'post': Post.objects.order_by('-created_at'),
+#     'commentary': Commentary.objects.order_by('-created_at'),
+#     'fdata': submit_comment(request),
+#     }
+#     print(data)
+#
+#     return render(request, 'comments/home.html', {'data': data})
+#
+#
+# def submit_comment(request):
+#     error = ''
+#
+#     if request.method == 'POST':
+#         form = CommentaryForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')
+#         else:
+#             error = 'Введены не коректные данные'
+#     else:
+#         pass
+#
+#     form = CommentaryForm()
+#     form_data = {
+#         'form': form,
+#         'error': error,
+#     }
+#     print(f"fdata{form_data}")
+#     return form_data
+#
+
+
+
+
+myButton.addEventListener("click", function () {
+    myPopup.classList.add("show");
+});
+closePopup.addEventListener("click", function () {
+    myPopup.classList.remove("show");
+});
+window.addEventListener("click", function (event) {
+    if (event.target == myPopup) {
+        myPopup.classList.remove("show");
+    }
+});
+
+
+
+
+
+
+var openButtons = document.querySelectorAll('.open-popup');
+var myPopup = document.getElementById('myPopup');
+var bindingField = document.querySelector('#myPopup [name="binding"]');
+
+openButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+        var bindingValue = button.getAttribute('data-binding');
+        bindingField.value = bindingValue;
+        myPopup.classList.add('show');
+    });
+});
+
+var closePopup = document.getElementById('closePopup');
+closePopup.addEventListener('click', function () {
+    myPopup.classList.remove('show');
+});
+
+window.addEventListener('click', function (event) {
+    if (event.target == myPopup) {
+        myPopup.classList.remove('show');
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Главная
+{% endblock title%}
+
+{% block content %}
+
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <div class="form-create-post">
+                <h3> Комментарий </h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ data.fdata.form.binding }}
+                    {{ data.fdata.form.captcha }}<br>
+                    {{ data.fdata.form.text }}<br>
+                    <span>{{ error }}</span>
+                    <button class="btn btn-secondary" type="submit">Оставить комментарий</button>
+                </form>
+            </div>
+            <br>
+            <button id="closePopup" class="btn btn-secondary" >Закрыть</button>
+        </div>
+    </div>
+
+    <div>
+        {% if data.post %}
+            {% for el in data.post %}
+                <div id="{{ el.id }}" class="post">
+                    <div class="alert alert-secondary">
+                        <h3> {{ el.title }} </h3>
+                        <h4  style="text-align: right;" > {{ el.author }}</h4>
+                    </div>
+
+                    <p class="text-post"> {{ el.text }} </p>
+
+                    <button data-binding="{{ el.id }}" class="btn btn-secondary open-popup"> Коментировать </button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-secondary">
+                <h3> Нет новостей </h3>
+            </div>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if data.commentary %}
+            {% for rv in data.commentary %}
+                <div id="{{ rv.id }}"  >
+                    <div class="header-comm">
+                        <img class="avatar" src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">
+                        {% if rv.user.home_page %}
+                            <a href="{{ rv.user.home_page }}">
+                                <h3 class="name-user"> {{  rv.user.username }} </h3>
+                            </a>
+                        {% else %}
+                            <h3 class="name-user"> {{  rv.user.username }} </h3>
+                        {% endif %}
+                        <p class="data-comm"> {{ rv.created_at|date:"d.m.y" }} в {{ rv.created_at|date:"H:i" }} </p>
+                        <div class="icon-container">
+                            <i class="fa-solid fa-hashtag icon"></i>
+                            <i class="fa-regular fa-bookmark icon"></i>
+                            <i class="fa-solid fa-code-branch icon"></i>
+                            <i class="fa-regular fa-circle-up icon"></i>
+                        </div>
+                        <p></p>
+                        <p>rating</p>
+                    </div>
+
+                    <p class="comm-text"> {{ rv.text }} </p>
+
+                    <button class="btn btn-secondary open-popup"> Ответить </button>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="comment-container" >
+                <p> Нет комментариев </p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
+
+
+
+
+
+if (openReplyButtons && replyPopup) {
+    openReplyButtons.forEach(function(button) {
+        button.addEventListener("click", function () {
+            replyPopup.classList.add("show");
+            var articleId = button.getAttribute('data-article-id');
+            // Используйте articleId для определения, для какой статьи была нажата кнопка
+        });
+    });
+}
+
+if (closeReplyPopup) {
+    closeReplyPopup.addEventListener("click", function () {
+        if (replyPopup) {
+            replyPopup.classList.remove("show");
+        }
+    });
+}
+
+window.addEventListener("click", function (event) {
+    if (replyPopup && event.target == replyPopup) {
+        replyPopup.classList.remove("show");
+    }
+});
+
+
+
+var openButtons = document.querySelectorAll('.open-popup');
+var bindingField = document.querySelector('#myPopup [name="binding"]');
+var bindingFieldCom = document.querySelector('#myPopup [name="binding_com"]');
+
+openButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+        var bindingValue = button.getAttribute('data-binding');
+        var bindingValueCom = button.getAttribute('data-binding-com');
+        bindingField.value = bindingValue;
+        bindingFieldCom.value = bindingValueCom;
+        myPopup.classList.add('show');
+    });
+});
+
+var closePopup = document.getElementById('closePopup');
+closePopup.addEventListener('click', function () {
+    myPopup.classList.remove('show');
+});
+var submitComit = document.getElementById('submitComit');
+submitComit.addEventListener('click', function () {
+  location.reload();
+});
+
+window.addEventListener('click', function (event) {
+    if (event.target == myPopup) {
+        myPopup.classList.remove('show');
+
+

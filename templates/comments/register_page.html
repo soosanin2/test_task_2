@@ -13,7 +13,7 @@
     <div class="post-container">
         <div id="{{ get_article.id }}" class="post">
             <div>
-                <form id="update_article" method="post">
+                <form id="update_article" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form }}
                 </form>

@@ -1,24 +1,27 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from rest_framework.reverse import reverse_lazy
 from rest_framework.viewsets import ModelViewSet
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 from .models import Post, Commentary, CustomUser
 from .forms import PostForm, CommentaryForm, AuthUserForm, RegisterUserForm
-from collections import defaultdict
 
-from .serializers import PostSerializer, CommentarySerializer, RecCommSerializer
+
+from .serializers import PostSerializer
 
 
 class HomeListView(ListView):
     model = Post
     template_name = 'comments/home.html'
     context_object_name = "list_articles"
+    ordering = ['-created_at']
 
 
 class ProjectLoginView(LoginView):
@@ -82,8 +85,6 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.author
-        self.request.uzer
 
         if self.request.user != self.object.author:
             return HttpResponseForbidden("У вас нет разрешения на удаление этой статьи.")
@@ -92,12 +93,11 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
+
 class DetailListView(FormMixin, DetailView):
     model = Post
     template_name = 'comments/detail_page.html'
     context_object_name = "get_article"
-
-
     form_class = CommentaryForm
 
     def post(self, request, *args, **kwargs):
@@ -117,6 +117,57 @@ class DetailListView(FormMixin, DetailView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('detail_page', kwargs={'pk': self.object.article.id})
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        sort_order = self.request.GET.get('sort_order', 'newest')
+
+        if sort_order == 'oldest':
+            comments = self.object.comments_articles.all().order_by('created_at')
+
+        elif sort_order == 'newest':
+            comments = self.object.comments_articles.all().order_by('-created_at')
+
+        elif sort_order == 'authorA':
+            comments = self.object.comments_articles.all().order_by('-author__username')
+
+        elif sort_order == 'authorZ':
+            comments = self.object.comments_articles.all().order_by('author__username')
+
+        elif sort_order == 'emailA':
+            comments = self.object.comments_articles.all().order_by('author__email')
+
+        elif sort_order == 'emailZ':
+            comments = self.object.comments_articles.all().order_by('-author__email')
+
+
+
+
+        page = self.request.GET.get('page')
+        paginator = Paginator(comments, 25)
+
+        try:
+            comments = paginator.page(page)
+        except PageNotAnInteger:
+            comments = paginator.page(1)
+
+        except EmptyPage:
+            comments = paginator.page(paginator.num_pages)
+
+
+        context['comments'] = comments
+        context['sort_order'] = sort_order
+
+        return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['comments'] = self.object.comments_articles.all().order_by('-created_at')
+    #     return context
+
 
 class RegisterUserView(CreateView):
     model = CustomUser
@@ -128,100 +179,22 @@ class RegisterUserView(CreateView):
         form_valid = super().form_valid(form)
         username = form.cleaned_data["username"]
         password = form.cleaned_data["password"]
-        aut_user = authenticate(username=username, password=password)
+        avatar = form.cleaned_data["avatar"]
+        email = form.cleaned_data.get("email")
+        aut_user = authenticate(username=username, password=password, avatar=avatar, email=email)
         login(self.request, aut_user)
         return form_valid
-
-
-# def post_app(request):
-#     return render(request, 'comments/home.html')
-
-
-class CommentaryView(ModelViewSet):
-    queryset = Commentary.objects.all()
-    serializer_class = CommentarySerializer
 
 
 def commentary_app(request):
     return render(request, 'comments/home.html')
 
 
-class RecCommView(ModelViewSet):
-    queryset = Commentary.objects.all()
-    serializer_class = RecCommSerializer
-
-
 def rec_comm_app(request):
     return render(request, 'comments/home.html')
-
 
 
 def task(request):
     return render(request, 'comments/task.html')
 
-#
-# def create_post(request):
-#     error = ''
-#
-#     if request.method == 'POST':
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             form = form.save(commit=False)
-#             form.author = request.user
-#             form.save()
-#             return redirect('home')
-#         else:
-#             error = 'Введены не коректные данные'
-#
-#     form = PostForm()
-#     data = {
-#         'form': form,
-#         'error': error
-#     }
-#     return render(request, 'comments/create_post.html', data)
-
-#
-# def registration(request):
-#     error = ''
-#
-#     if request.method == 'POST':
-#         form = RegistrationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             return redirect('home')
-#         else:
-#             error = 'Введите коректные данные'
-#
-#     form = RegistrationForm()
-#     data = {
-#         'form': form,
-#         'error': error
-#     }
-#
-#     return render(request, 'comments/registration.html', data)
-
-#
-# def submit_comment(request):
-#
-#     error = ''
-#
-#     if request.method == 'POST':
-#         form = CommentaryForm(request.POST)
-#         if form.is_valid():
-#             comment = form.save(commit=False)
-#             comment.user = request.user
-#             comment.save()
-#             return redirect('home')
-#         else:
-#             error = 'Введены не коректные данные'
-#     else:
-#         pass
-#
-#     form = CommentaryForm()
-#     form_data = {
-#         'form': form,
-#         'error': error,
-#     }
-#     return form_data
 

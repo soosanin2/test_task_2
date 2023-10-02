@@ -23,7 +23,9 @@
 
                         <p class="text-post"> {{ el.text }} </p>
 
-                        <a href="/detail/{{el.id}}"><button class="btn btn-secondary">Перейти к статье</button></a>
+                        <a href="/detail/{{ el.id }}">
+                            <button class="btn btn-secondary">Перейти к статье</button>
+                        </a>
 
                     </div>
                 </div>
@@ -74,33 +76,33 @@
 
 
 
-{#        <div>#}
-{#            <h2> Posts </h2>#}
-{#            {% verbatim %}#}
-{#            <div class="container" id="post_app">#}
-{##}
-{#                <div class="post" v-for="post in posts">#}
-{#                    <div class="alert alert-secondary">#}
-{#                        <h3> {{ post.title }} </h3>#}
-{#                        <h4 style="text-align: right;"> {{ post.author_username }}</h4>#}
-{#                    </div>#}
-{#                    <p class="text-post"> {{ post.text }} </p>#}
-{#                </div>#}
-{##}
-{#            </div>#}
-{#            {% endverbatim %}#}
-{#            <h2> Commentaries </h2>#}
-{##}
-{##}
-{#            {% verbatim %}#}
-{#            <div class="container" id="comm_app">#}
-{#                <div v-for="commentary in commentaries">#}
-{#                    <p>{{ commentary.id }}</p>#}
-{#                    <p>{{ commentary.id_list }}</p>#}
-{#                </div>#}
-{#            </div>#}
-{#            {% endverbatim %}#}
-{#        </div>#}
+    {#        <div>#}
+    {#            <h2> Posts </h2>#}
+    {#            {% verbatim %}#}
+    {#            <div class="container" id="post_app">#}
+    {##}
+    {#                <div class="post" v-for="post in posts">#}
+    {#                    <div class="alert alert-secondary">#}
+    {#                        <h3> {{ post.title }} </h3>#}
+    {#                        <h4 style="text-align: right;"> {{ post.author_username }}</h4>#}
+    {#                    </div>#}
+    {#                    <p class="text-post"> {{ post.text }} </p>#}
+    {#                </div>#}
+    {##}
+    {#            </div>#}
+    {#            {% endverbatim %}#}
+    {#            <h2> Commentaries </h2>#}
+    {##}
+    {##}
+    {#            {% verbatim %}#}
+    {#            <div class="container" id="comm_app">#}
+    {#                <div v-for="commentary in commentaries">#}
+    {#                    <p>{{ commentary.id }}</p>#}
+    {#                    <p>{{ commentary.id_list }}</p>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#            {% endverbatim %}#}
+    {#        </div>#}
 
 
     <div id="myPopup" class="popup">

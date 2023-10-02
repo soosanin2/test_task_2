@@ -8,7 +8,7 @@ from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInp
 class AuthUserForm(AuthenticationForm, ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'email')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -20,7 +20,7 @@ class CommentaryForm(ModelForm):
     class Meta:
         model = Commentary
 
-        fields = ('binding_com', 'captcha', 'text', 'your_file',)
+        fields = ('binding_com', 'captcha', 'text', )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -31,7 +31,7 @@ class CommentaryForm(ModelForm):
 class RegisterUserForm(ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'avatar', 'email')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,18 +46,32 @@ class RegisterUserForm(ModelForm):
         return user
 
 
+
+
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'text']
 
-        widgets = {
-            "title": TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': "Заголовок"
-            }),
-            "text": Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': "Текст статьи"
-            }),
-        }
+        fields = ('title', 'your_file', 'text', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+# class PostForm(ModelForm):
+#     class Meta:
+#         model = Post
+#         fields = ['title', 'text', 'your_file',]
+#
+#         widgets = {
+#             "title": TextInput(attrs={
+#                 'class': 'form-control',
+#                 'placeholder': "Заголовок"
+#             }),
+#             "text": Textarea(attrs={
+#                 'class': 'form-control',
+#                 'placeholder': "Текст статьи"
+#             }),
+#         }

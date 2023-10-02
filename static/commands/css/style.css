@@ -6,6 +6,10 @@ body {
     font-size: 20px;
 }
 
+
+
+
+
 /*popup*/
 .popup {
     position: fixed;
@@ -37,9 +41,6 @@ body {
     display: block;
 }
 
-h1 {
-    color: green;
-}
 
 /*header*/
 .header-container {
@@ -101,6 +102,7 @@ h1 {
     margin-bottom: 30px;
     background-color: #f7e2be;
     border-radius: 7px;
+
 }
 
 .post button {
@@ -108,22 +110,58 @@ h1 {
     margin-bottom: 15px;
 }
 
-.text-post {
-    margin: 15px;
-    text-align: justify;
+.content-post {
+
 }
+
+.mini-img {
+    float: left;
+    text-decoration: none;
+    color: inherit;
+    display: inline-block; /* Делаем элемент блочным для обтекания текстом */
+    margin-left: 15px; /* Отступ справа для текста */
+    margin-right: 10px; /* Отступ справа для текста */
+    margin-bottom: 10px; /* Отступ снизу для текста */
+}
+
+.border-img {
+    border-radius: 7px; /* Скругление у изображения */
+    border: 1px solid #643200; /* Темнокоричневая рамка */
+    transition: border 0.1s;
+}
+
+.border-img:hover {
+    border: 3px solid #643200; /* Убираем рамку при наведении */
+}
+
+
+.text-post {
+    text-align: justify;
+    margin: 15px;
+}
+
 
 .alert.alert-secondary {
     display: grid;
     grid-template-columns: 5fr 1fr;
 }
 
+.userfile {
+    background-color: #888888;
+}
 
 /*Comment*/
 .comment-container {
     /*margin-left: 30px;*/
 }
 
+.all-comments{
+    margin: 0 auto;
+}
+
+.sort-comments{
+    text-align: center;
+}
 
 .binding {
     /*display: none;*/
