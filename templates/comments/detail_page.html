@@ -1,10 +1,27 @@
 {% extends 'base.html' %}
+{% load comments_tags %}
+{% load custom_filters %}
+
 
 {% block title %}
     {{ get_article.title }}
 {% endblock title %}
 
 {% block content %}
+
+
+    {#    <div class="comments">#}
+    {#        {% for comm in comments %}#}
+    {#            <div class="comment-container">#}
+    {#                <p>{{ comm.text }}</p>#}
+    {#                <button data-comment-id="{{ comm.id }}" class="btn btn-secondary reply-button">#}
+    {#                    Ответить#}
+    {#                </button>#}
+    {##}
+    {#                {% comments_for_parent comments comm.id %}#}
+    {#            </div>#}
+    {#        {% endfor %}#}
+    {#    </div>#}
 
     <div>
 
@@ -16,11 +33,15 @@
                 </div>
                 <div class="content-post">
                     {% if get_article.your_file %}
-                        <a id="myImg" data-binding="{{ get_article.id }}" class="mini-img open-popup">
-                            <img src="{{ get_article.your_file.url }}" class="border-img" alt="File" width="70">
-                        </a>
+                        {% if get_article.your_file|has_txt_extension %}
+                            <a href="{{ get_article.your_file.url }}" class="btn btn-primary" download>Скачать файл</a>
+                        {% else %}
+                            <a id="myImg" data-binding="{{ get_article.id }}" class="mini-img open-popup">
+                                <img src="{{ get_article.your_file.url }}" class="border-img" alt="File" width="70">
+                            </a>
+                        {% endif %}
                     {% endif %}
-                    <p class="text-post"> {{ get_article.text }} </p>
+                    <p class="text-post"> {{ get_article.text|safe }} </p>
                 </div>
 
                 <button id="myButton" data-binding="{{ get_article.id }}" class="btn btn-secondary open-popup">
@@ -42,31 +63,75 @@
                 </div>
 
                 <div>
-                    {% for comm in comments %}
-                        <div class="back-com">
-                            <div id="{{ comm.id }}" class="comment-container">
-                                <div class="header-comm">
-                                    <img class="avatar" src="{{ comm.author.get_avatar_url }}" alt="Avatar" width="50">
-                                    <h3 class="name-user"> {{ comm.author }} </h3>
-                                    <p class="data-comm"> {{ comm.created_at|date:"d.m.y" }}
-                                        в {{ comm.created_at|date:"H:i" }} </p>
-                                    <div class="icon-container">
-                                        <i class="fa-solid fa-hashtag icon"></i>
-                                        <i class="fa-regular fa-bookmark icon"></i>
-                                        <i class="fa-solid fa-code-branch icon"></i>
-                                        <i class="fa-regular fa-circle-up icon"></i>
-                                    </div>
-                                    <p></p>
-                                    <p>rating</p>
-                                    <p></p>
-                                </div>
-                                <p class="comm-text"> {{ comm.text }} </p>
-                                <button data-article-id="{{ get_article.id }}" class="btn btn-secondary open-reply-popup">
-                                    Ответить
-                                </button>
 
+                    {% for comm in comments %}
+                        {% if comm.binding_com == None %}
+                            <div class="back-com">
+                            <div id="{{ comm.id }}" class="comment-container">
+                                {% with div_id=comm.id %}
+                                    <div class="header-comm">
+                                        <img class="avatar" src="{{ comm.author.get_avatar_url }}" alt="Avatar"
+                                             width="50">
+                                        <h3 class="name-user"> {{ comm.author }} </h3>
+                                        <p class="data-comm"> {{ comm.created_at|date:"d.m.y" }}
+                                            в {{ comm.created_at|date:"H:i" }} </p>
+                                        <div class="icon-container">
+                                            <i class="fa-solid fa-hashtag icon"></i>
+                                            <i class="fa-regular fa-bookmark icon"></i>
+                                            <i class="fa-solid fa-code-branch icon"></i>
+                                            <i class="fa-regular fa-circle-up icon"></i>
+
+                                        </div>
+                                        <p></p>
+                                        <p>rating</p>
+                                        <p></p>
+                                    </div>
+                                    <p class="comm-text"> {{ comm.text|safe }} </p>
+                                    <button data-article-id="{{ comm.id }}" class="btn btn-secondary open-reply-popup">
+                                        Ответить
+                                    </button>
+
+                                    {% with parent_text=comm.text %}
+
+                                        {% for rev in comments %}
+                                            {% if rev.binding_com == div_id %}
+                                                <div>
+                                                    <div class="header-comm">
+                                                        <img class="avatar" src="{{ rev.author.get_avatar_url }}"
+                                                             alt="Avatar"
+                                                             width="50">
+                                                        <h3 class="name-user"> {{ rev.author }} </h3>
+                                                        <p class="data-comm"> {{ rev.created_at|date:"d.m.y" }}
+                                                            в {{ rev.created_at|date:"H:i" }} </p>
+                                                        <div class="icon-container">
+                                                            <i class="fa-solid fa-hashtag icon"></i>
+                                                            <i class="fa-regular fa-bookmark icon"></i>
+                                                            <i class="fa-solid fa-code-branch icon"></i>
+                                                            <i class="fa-regular fa-circle-up icon"></i>
+                                                        </div>
+                                                        <p></p>
+                                                        <p>rating</p>
+                                                        <p></p>
+                                                    </div>
+                                                    <div class="custom-alert">
+                                                        <p class="back-com-par"> {{ parent_text|safe }}</p>
+                                                    </div>
+
+                                                    <p class="comm-text"> {{ rev.text|safe }} </p>
+                                                    {#                                                    <button data-article-id="{{ rev.text }}"#}
+                                                    {#                                                            class="btn btn-secondary open-reply-popup">#}
+                                                    {#                                                        Ответить#}
+                                                    {#                                                    </button>#}
+
+                                                </div>
+
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
+                                {% endwith %}
                             </div>
-                        </div>
+                        {% endif %}
+                    </div>
                     {% endfor %}
                 </div>
             </div>
@@ -74,16 +139,12 @@
     </div>
 
 
-
-
-
-
     <div id="replyPopup" class="popup">
         <div class="popup-content">
             <div class="form-create-post">
                 <h3> Комментарий </h3>
                 <div>
-                    <form id="replyForm" method="post">
+                    <form id="replyForm" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form }}
                     </form>
@@ -101,7 +162,7 @@
             <div class="form-create-post">
                 <h3> Комментарий </h3>
                 <div>
-                    <form id="add_form" method="post">
+                    <form id="add_form" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form }}
                     </form>
@@ -116,18 +177,27 @@
 
     <div id="myImgPopup" class="popup">
         <div class="popup-content">
+
+        <button id="closeImgPopup" class="btn btn-secondary">&times;</button>
             <div>
                 {% if get_article.your_file %}
-                    <img src="{{ get_article.your_file.url }}" class="img-thumbnail" alt="File" width="320">
+                    <img src="{{ get_article.your_file.url }}" class="img-thumbnail" alt="File" width="320" alt="File Image">
                 {% endif %}
             </div>
-            <br>
-            <button id="closeImgPopup" class="btn btn-secondary">Закрыть</button>
         </div>
     </div>
 
-
-
+    <div id="myTxtPopup" class="popup">
+        <div class="popup-content">
+            <div>
+                {% if get_article.txt_file %}
+                    <a href="{{ get_article.txt_file.url }}" target="_blank">Скачать .txt файл</a>
+                {% endif %}
+            </div>
+            <br>
+            <button id="closeTxtPopup" class="btn btn-secondary">Закрыть</button>
+        </div>
+    </div>
 
     <div class="pagination">
     <span class="step-links">

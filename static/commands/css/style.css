@@ -15,9 +15,9 @@ body {
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 0;
+    top: -50px;
     width: 100%;
-    height: 100%;
+    height: 120%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
     display: none;
@@ -25,21 +25,26 @@ body {
 
 .popup-content {
     background-color: white;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888888;
-    width: 30%;
+    margin: 20% auto;
+    padding: initial;
+    border: 2px solid #888888;
+    width: max-content;
     font-weight: bolder;
+    border-radius: 10px;
+
 }
 
 .popup-content button {
+    margin-left: auto;
     display: block;
-    margin: 0 auto;
+    margin-top: -50px;
+
 }
 
 .show {
     display: block;
 }
+
 
 
 /*header*/
@@ -168,9 +173,7 @@ body {
 }
 
 .back-com-par {
-    background-color: darkcyan;
-    margin-left: 15px;
-    width: 80ch;
+
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -263,6 +266,17 @@ body {
     text-align: justify;
 }
 
+
+.custom-alert {
+    width: 70%;
+    padding-left:30px;
+    padding-right: 30px;
+    line-height: 1.5;
+    background-color: #cccccc;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    margin-top: 10px;
+}
 
 /*footer*/
 

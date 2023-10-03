@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from captcha.fields import CaptchaField
 from django.contrib.auth import get_user_model
 
 
@@ -44,7 +45,7 @@ class Post(models.Model):
                                null=True, )
     your_file = models.FileField(
         upload_to=user_file_path, blank=True, null=True, verbose_name="Your File",
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'txt']),
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'gif', 'txt']),
                     ])
     title = models.CharField(max_length=200)
     text = models.TextField()
@@ -60,7 +61,7 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         if self.your_file:
             # Если загружено изображение, обработать его
-            if self.your_file.name.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            if self.your_file.name.endswith(('.jpg', '.png', '.gif')):
                 max_width = 320
                 max_height = 240
                 image = Image.open(self.your_file)
@@ -89,7 +90,7 @@ class Commentary(models.Model):
     binding_com = models.IntegerField(verbose_name="Binding_com", blank=True, null=True)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="author_article", blank=True, null=True)
 
-    captcha = models.CharField(max_length=255, verbose_name="Captcha")
+    captcha = CaptchaField()
     text = models.TextField(verbose_name="Text")
     created_at = models.DateTimeField(auto_now_add=True)
 

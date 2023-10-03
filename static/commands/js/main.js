@@ -21,16 +21,39 @@ if (closeImgPopup) {
 }
 
 
+// // Открыть модальное окно при нажатии на изображение
+// document.getElementById("myImg").addEventListener("click", function() {
+//     document.getElementById("myImgPopup").style.display = "block";
+// });
+//
+// // Закрыть модальное окно при нажатии на кнопку закрытия
+// document.getElementById("closeImgPopup").addEventListener("click", function() {
+//     document.getElementById("myImgPopup").style.display = "none";
+// });
+
+
 // popap post
 var myButton = document.getElementById('myButton');
 var myPopup = document.getElementById('myPopup');
 var closePopup = document.getElementById('closePopup');
 
 
-if (myButton) {
+if (myButton && myPopup) {
     myButton.addEventListener("click", function () {
         if (myPopup) {
             myPopup.classList.add("show");
+var bindingComInput = myPopup.querySelector('input[name="binding_com"]');
+        var bindingComLabel = myPopup.querySelector('label[for="id_binding_com"]');
+
+        if (bindingComInput) {
+            bindingComInput.style.display = "none";
+        }
+
+        if (bindingComLabel) {
+            bindingComLabel.style.display = "none";
+        }
+
+
         }
     });
 
@@ -65,7 +88,17 @@ if (openReplyButtons && replyPopup) {
         button.addEventListener("click", function () {
             replyPopup.classList.add("show");
             var articleId = button.getAttribute('data-article-id');
-            // Используйте articleId для определения, для какой статьи была нажата кнопка
+            var bindingComInput = document.querySelector('#replyForm input[name="binding_com"]');
+            var bindingComLabel = document.querySelector('label[for="id_binding_com"]');
+
+            if (bindingComInput) {
+                bindingComInput.value = articleId;
+                bindingComInput.hidden = true;
+            }
+            if (bindingComLabel) {
+                bindingComLabel.hidden = true;
+            }
+
         });
     });
 }

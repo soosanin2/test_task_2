@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_filters',
+    'captcha',
 
     'comments',
 ]
@@ -116,3 +117,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+BLEACH_ALLOWED_TAGS = ['a', 'code', 'i', 'strong']
+BLEACH_ALLOWED_ATTRIBUTES = {
+    '*': ['href', 'title'],
+    'a': ['href', 'title'],
+}

@@ -8,11 +8,11 @@ from django.views.generic.edit import FormMixin
 from rest_framework.reverse import reverse_lazy
 from rest_framework.viewsets import ModelViewSet
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .utils import clean_html
 
 
 from .models import Post, Commentary, CustomUser
-from .forms import PostForm, CommentaryForm, AuthUserForm, RegisterUserForm
-
+from .forms import PostForm, CommentaryForm, AuthUserForm, RegisterUserForm, CommentaryWithCaptchaForm
 
 from .serializers import PostSerializer
 
@@ -36,7 +36,7 @@ class ProjectLoginView(LoginView):
 class ProjectLogoutView(LogoutView):
     next_page = reverse_lazy("home")
 
-
+# Попытка вывода через API
 class PostView(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -94,11 +94,14 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(success_url)
 
 
+
+
+
 class DetailListView(FormMixin, DetailView):
     model = Post
     template_name = 'comments/detail_page.html'
     context_object_name = "get_article"
-    form_class = CommentaryForm
+    form_class = CommentaryWithCaptchaForm
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -107,11 +110,24 @@ class DetailListView(FormMixin, DetailView):
         else:
             return self.form_invalid(form)
 
+    # def form_valid(self, form):
+    #     self.object = form.save(commit=False)
+    #     self.object.article = self.get_object()
+    #     self.object.author = self.request.user
+    #     self.object.save()
+    #     print(form.cleaned_data)
+    #     return super().form_valid(form)
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.article = self.get_object()
         self.object.author = self.request.user
+
+        # Очистите HTML-код, перед сохранением его в базу данных
+        self.object.text = clean_html(self.object.text)
+
         self.object.save()
+        print(form.cleaned_data)
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):
@@ -125,48 +141,76 @@ class DetailListView(FormMixin, DetailView):
 
         sort_order = self.request.GET.get('sort_order', 'newest')
 
-        if sort_order == 'oldest':
-            comments = self.object.comments_articles.all().order_by('created_at')
+        comments = []
+        if hasattr(self, 'object'):
+            if sort_order == 'oldest':
+                comments = self.object.comments_articles.all().order_by('created_at')
 
-        elif sort_order == 'newest':
-            comments = self.object.comments_articles.all().order_by('-created_at')
+            elif sort_order == 'newest':
+                comments = self.object.comments_articles.all().order_by('-created_at')
 
-        elif sort_order == 'authorA':
-            comments = self.object.comments_articles.all().order_by('-author__username')
+            elif sort_order == 'authorA':
+                comments = self.object.comments_articles.all().order_by('-author__username')
 
-        elif sort_order == 'authorZ':
-            comments = self.object.comments_articles.all().order_by('author__username')
+            elif sort_order == 'authorZ':
+                comments = self.object.comments_articles.all().order_by('author__username')
 
-        elif sort_order == 'emailA':
-            comments = self.object.comments_articles.all().order_by('author__email')
+            elif sort_order == 'emailA':
+                comments = self.object.comments_articles.all().order_by('author__email')
 
-        elif sort_order == 'emailZ':
-            comments = self.object.comments_articles.all().order_by('-author__email')
+            elif sort_order == 'emailZ':
+                comments = self.object.comments_articles.all().order_by('-author__email')
 
+            page = self.request.GET.get('page')
+            paginator = Paginator(comments, 25)
 
+            try:
+                comments = paginator.page(page)
+            except PageNotAnInteger:
+                comments = paginator.page(1)
 
-
-        page = self.request.GET.get('page')
-        paginator = Paginator(comments, 25)
-
-        try:
-            comments = paginator.page(page)
-        except PageNotAnInteger:
-            comments = paginator.page(1)
-
-        except EmptyPage:
-            comments = paginator.page(paginator.num_pages)
-
+            except EmptyPage:
+                comments = paginator.page(paginator.num_pages)
 
         context['comments'] = comments
         context['sort_order'] = sort_order
 
         return context
 
+
+    # def post(self, request, *args, **kwargs):
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         # Проверка CAPTCHA
+    #         if not form.cleaned_data['captcha'].is_valid:
+    #             return self.form_invalid(form)
+    #
+    #         self.object = form.save(commit=False)
+    #         self.object.article = self.get_object()
+    #         self.object.author = self.request.user
+    #         self.object.save()
+    #
+    #         return self.form_valid(form)
+    #     else:
+    #         return self.form_invalid(form)
+
+    # def post(self, request, *args, **kwargs):
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         # Проверка CAPTCHA
+    #         if not form.cleaned_data['captcha'][0].is_valid:
+    #
+    #             return self.form_invalid(form)
+    #
+    #         return self.form_valid(form)
+    #     else:
+    #         return self.form_invalid(form)
+
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     context['comments'] = self.object.comments_articles.all().order_by('-created_at')
     #     return context
+
 
 
 class RegisterUserView(CreateView):
@@ -186,12 +230,12 @@ class RegisterUserView(CreateView):
         return form_valid
 
 
-def commentary_app(request):
-    return render(request, 'comments/home.html')
+# def commentary_app(request):
+#     return render(request, 'comments/home.html')
 
 
-def rec_comm_app(request):
-    return render(request, 'comments/home.html')
+# def rec_comm_app(request):
+#     return render(request, 'comments/home.html')
 
 
 def task(request):

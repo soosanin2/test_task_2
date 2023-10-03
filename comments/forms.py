@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 
 from .models import Post, CustomUser, Commentary
 from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInput, ImageField
+from captcha.fields import CaptchaField
+
 
 
 class AuthUserForm(AuthenticationForm, ModelForm):
@@ -17,15 +19,22 @@ class AuthUserForm(AuthenticationForm, ModelForm):
 
 
 class CommentaryForm(ModelForm):
+
     class Meta:
         model = Commentary
 
-        fields = ('binding_com', 'captcha', 'text', )
+        fields = ('binding_com', 'text')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+
+
+class CommentaryWithCaptchaForm(CommentaryForm):
+    captcha = CaptchaField()
 
 
 class RegisterUserForm(ModelForm):

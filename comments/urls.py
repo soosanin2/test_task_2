@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from . import views
-from .views import PostView, commentary_app
+from .views import PostView
 
 router = SimpleRouter()
 
@@ -21,7 +21,7 @@ urlpatterns = [
     path('edit-page', views.PostCreateView.as_view(), name='edit_page'),
     path('update-page/<int:pk>', views.PostUpdateView.as_view(), name='update_page'),
     path('delete-page/<int:pk>', views.PostDeleteView.as_view(), name='delete_page'),
-    path('commentary_app', commentary_app, name='commentary_app'),
+    # path('commentary_app', commentary_app, name='commentary_app'),
 
 
 ]
