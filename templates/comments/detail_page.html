@@ -178,12 +178,13 @@
     <div id="myImgPopup" class="popup">
         <div class="popup-content">
 
-        <button id="closeImgPopup" class="btn btn-secondary">&times;</button>
             <div>
                 {% if get_article.your_file %}
                     <img src="{{ get_article.your_file.url }}" class="img-thumbnail" alt="File" width="320" alt="File Image">
                 {% endif %}
             </div>
+            <br>
+            <button id="closeImgPopup" class="btn btn-secondary">Закрыть</button>
         </div>
     </div>
 
