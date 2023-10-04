@@ -1,3 +1,4 @@
 venv
 .idea
-comments/migrations
+comments/migrations/*
+!comments/migrations/__init__.py
