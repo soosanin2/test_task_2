@@ -10,7 +10,7 @@ from captcha.fields import CaptchaField
 class AuthUserForm(AuthenticationForm, ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'password', 'email')
+        fields = ('username', 'password')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
