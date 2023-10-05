@@ -1,8 +1,12 @@
+
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
+from django.views import View
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from rest_framework.reverse import reverse_lazy
@@ -15,6 +19,10 @@ from .models import Post, Commentary, CustomUser
 from .forms import PostForm, CommentaryForm, AuthUserForm, RegisterUserForm, CommentaryWithCaptchaForm
 
 from .serializers import PostSerializer
+
+
+def task(request):
+    return render(request, 'comments/task.html')
 
 
 class HomeListView(ListView):
@@ -94,15 +102,13 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(success_url)
 
 
-
-
-
 class DetailListView(FormMixin, DetailView):
     model = Post
     template_name = 'comments/detail_page.html'
     context_object_name = "get_article"
     form_class = CommentaryWithCaptchaForm
 
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -238,7 +244,6 @@ class RegisterUserView(CreateView):
 #     return render(request, 'comments/home.html')
 
 
-def task(request):
-    return render(request, 'comments/task.html')
+
 
 

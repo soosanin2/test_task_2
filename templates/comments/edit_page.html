@@ -11,7 +11,7 @@
         <p> Страница редактирования </p>
         <br>
         <div>
-            <form id="update_article" method="post">
+            <form id="update_article" method="post" enctype="multipart/form-data" >
                 {% csrf_token %}
                 {{ form }}
             </form>

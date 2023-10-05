@@ -43,10 +43,14 @@
                     {% endif %}
                     <p class="text-post"> {{ get_article.text|safe }} </p>
                 </div>
-
-                <button id="myButton" data-binding="{{ get_article.id }}" class="btn btn-secondary open-popup">
-                    Коментировать
-                </button>
+                {% if user.is_authenticated %}
+                    <button id="myButton" data-binding="{{ get_article.id }}" class="btn btn-secondary open-popup">
+                        Коментировать
+                    </button>
+                {% else %}
+                    <p>Для того чтобы оставить комментарий, вам необходимо <a href="{% url 'login_page' %}">Войти</a>
+                    </p>
+                {% endif %}
                 <a href="{% url 'home' %}">
                     <button class="btn btn-secondary">Назад</button>
                 </a>
@@ -54,12 +58,28 @@
             </div>
             <div class="all-comments">
                 <div class="sort-comments">
-                    <a href="?sort_order=newest" class="btn btn-secondary">Сначала новые</a>
-                    <a href="?sort_order=oldest" class="btn btn-secondary">Сначала старые</a>
-                    <a href="?sort_order=authorA" class="btn btn-secondary">По автору (A-Z)</a>
-                    <a href="?sort_order=authorZ" class="btn btn-secondary">По автору (Z-A)</a>
-                    <a href="?sort_order=emailA" class="btn btn-secondary">По email (A-Z)</a>
-                    <a href="?sort_order=emailZ" class="btn btn-secondary">По email (Z-A)</a>
+                    <p></p>
+                    <div class="h_item">
+                        <a href="?sort_order=newest" class="btn btn-secondary"><i
+                                class="fa-solid fa-arrow-down-1-9"></i></a>По дате
+                        <a href="?sort_order=oldest" class="btn btn-secondary"><i
+                                class="fa-solid fa-arrow-down-9-1"></i></a>
+                    </div>
+                    <p></p>
+                    <div class="h_item">
+                        <a href="?sort_order=authorA" class="btn btn-secondary"><i
+                                class="fa-solid fa-arrow-down-a-z"></i></a>По автору
+                        <a href="?sort_order=authorZ" class="btn btn-secondary"><i
+                                class="fa-solid fa-arrow-down-z-a"></i></a>
+                    </div>
+                    <p></p>
+                    <div class="h_item">
+                        <a href="?sort_order=emailA" class="btn btn-secondary"><i
+                                class="fa-solid fa-arrow-down-a-z"></i></a>По Email
+                        <a href="?sort_order=emailZ" class="btn btn-secondary"><i
+                                class="fa-solid fa-arrow-down-z-a"></i></a>
+                    </div>
+                    <p></p>
                 </div>
 
                 <div>
@@ -83,13 +103,28 @@
 
                                         </div>
                                         <p></p>
-                                        <p>rating</p>
+                                        {% if user.is_authenticated %}
+                                            <a href=""><i class="fa-solid fa-angles-up"></i></a>
+                                        {% endif %}
+                                        <div> {{ comm.likes_set.all.count }} &#9829;</div>
+                                        {% if user.is_authenticated %}
+                                            <a href=""><i class="fa-solid fa-angles-down"></i></a>
+                                        {% endif %}
                                         <p></p>
+
+
                                     </div>
                                     <p class="comm-text"> {{ comm.text|safe }} </p>
-                                    <button data-article-id="{{ comm.id }}" class="btn btn-secondary open-reply-popup">
-                                        Ответить
-                                    </button>
+                                    {% if user.is_authenticated %}
+                                        <button data-article-id="{{ comm.id }}"
+                                                class="btn btn-secondary open-reply-popup">
+                                            Ответить
+                                        </button>
+                                    {% else %}
+                                        <p>Для того чтобы оставить комментарий, вам необходимо <a
+                                                href="{% url 'login_page' %}">Войти</a></p>
+                                    {% endif %}
+
 
                                     {% with parent_text=comm.text %}
 
@@ -110,7 +145,13 @@
                                                             <i class="fa-regular fa-circle-up icon"></i>
                                                         </div>
                                                         <p></p>
-                                                        <p>rating</p>
+                                                        {% if user.is_authenticated %}
+                                                            <a href=""><i class="fa-solid fa-angles-up"></i></a>
+                                                        {% endif %}
+                                                        <div> {{ comm.likes_set.all.count }} &#9829;</div>
+                                                        {% if user.is_authenticated %}
+                                                            <a href=""><i class="fa-solid fa-angles-down"></i></a>
+                                                        {% endif %}
                                                         <p></p>
                                                     </div>
                                                     <div class="custom-alert">
@@ -121,7 +162,7 @@
                                                     {#                                                    <button data-article-id="{{ rev.text }}"#}
                                                     {#                                                            class="btn btn-secondary open-reply-popup">#}
                                                     {#                                                        Ответить#}
-                                                    {#                                                    </button>#}
+                                                    {#                                                                                                        </button>#}
 
                                                 </div>
 
@@ -180,7 +221,8 @@
 
             <div>
                 {% if get_article.your_file %}
-                    <img src="{{ get_article.your_file.url }}" class="img-thumbnail" alt="File" width="320" alt="File Image">
+                    <img src="{{ get_article.your_file.url }}" class="img-thumbnail" alt="File" width="320"
+                         alt="File Image">
                 {% endif %}
             </div>
             <br>

@@ -101,26 +101,5 @@ class Commentary(models.Model):
         verbose_name = "Commentary"
         verbose_name_plural = "Commentaries"
 
-    # def save(self, *args, **kwargs):
-    #     if self.your_file:
-    #         # Если загружено изображение, обработать его
-    #         if self.your_file.name.endswith(('.jpg', '.jpeg', '.png', '.gif')):
-    #             max_width = 320
-    #             max_height = 240
-    #             image = Image.open(self.your_file)
-    #             width, height = image.size
-    #
-    #             # Проверить размер изображения и изменить его, если необходимо
-    #             if width > max_width or height > max_height:
-    #                 image.thumbnail((max_width, max_height), Image.BOX)
-    #                 image.save(self.your_file.path)
-    #
-    #         # Если загружен текстовый файл, проверить его размер
-    #         elif self.your_file.name.endswith('.txt'):
-    #             max_size_kb = 100
-    #             file_size = self.your_file.size  # Размер файла в байтах
-    #
-    #             if file_size > max_size_kb * 1024:  # Перевести в килобайты
-    #                 raise ValidationError(f"Максимальный размер текстового файла - {max_size_kb} KB.")
-    #
-    #     super().save(*args, **kwargs)
+
+
