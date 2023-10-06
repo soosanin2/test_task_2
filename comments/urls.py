@@ -1,13 +1,13 @@
 from django.urls import path
-from rest_framework.routers import SimpleRouter
+# from rest_framework.routers import SimpleRouter
 
 from . import views
-from .views import PostView
 
-router = SimpleRouter()
+# для API
+# from .views import PostView
 
-router.register('api/post', PostView)
-
+# router = SimpleRouter()
+# router.register('api/post', PostView)
 # http://127.0.0.1:8000/api/post/?format=json
 
 
@@ -21,9 +21,8 @@ urlpatterns = [
     path('edit-page', views.PostCreateView.as_view(), name='edit_page'),
     path('update-page/<int:pk>', views.PostUpdateView.as_view(), name='update_page'),
     path('delete-page/<int:pk>', views.PostDeleteView.as_view(), name='delete_page'),
-    # path('commentary_app', commentary_app, name='commentary_app'),
-
 
 ]
 
-urlpatterns += router.urls
+# для API
+# urlpatterns += router.urls

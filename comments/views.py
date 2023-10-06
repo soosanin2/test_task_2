@@ -20,18 +20,18 @@ from .forms import PostForm, CommentaryForm, AuthUserForm, RegisterUserForm, Com
 
 from .serializers import PostSerializer
 
-
+# Страница с заданием
 def task(request):
     return render(request, 'comments/task.html')
 
-
+# Главная страница
 class HomeListView(ListView):
     model = Post
     template_name = 'comments/home.html'
     context_object_name = "list_articles"
     ordering = ['-created_at']
 
-
+# Страница входа
 class ProjectLoginView(LoginView):
     template_name = 'comments/login_page.html'
     form_class = AuthUserForm
@@ -40,16 +40,16 @@ class ProjectLoginView(LoginView):
     def get_success_url(self):
         return self.success_url
 
-
+# Страница выхода
 class ProjectLogoutView(LogoutView):
     next_page = reverse_lazy("home")
 
 # Попытка вывода через API
-class PostView(ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+# class PostView(ModelViewSet):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
 
-
+# Создание нового поста
 class PostCreateView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy("login_page")
     model = Post
@@ -67,7 +67,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         self.object.save()
         return super().form_valid(form)
 
-
+# Обновление существующего поста
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     login_url = reverse_lazy("login_page")
     model = Post
@@ -84,7 +84,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
         return kwargs
 
-
+# Удаление поста
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     # login_url = reverse_lazy("login_page")
     model = Post
@@ -101,47 +101,44 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         self.object.delete()
         return HttpResponseRedirect(success_url)
 
-
+# Индивидуальная страница поста с возможностью добавления комментариев
 class DetailListView(FormMixin, DetailView):
+    form_class = CommentaryWithCaptchaForm
     model = Post
     template_name = 'comments/detail_page.html'
     context_object_name = "get_article"
-    form_class = CommentaryWithCaptchaForm
 
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     self.object.article = self.get_object()
-    #     self.object.author = self.request.user
-    #     self.object.save()
-    #     print(form.cleaned_data)
-    #     return super().form_valid(form)
-
+    # Обработка отправки комментария
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.article = self.get_object()
         self.object.author = self.request.user
-
-        # Очистите HTML-код, перед сохранением его в базу данных
         self.object.text = clean_html(self.object.text)
-
         self.object.save()
         print(form.cleaned_data)
         return super().form_valid(form)
 
+    # Обработка HTTP POST запроса
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            print(self.form_valid(form))
+            return self.form_valid(form)
+        else:
+            print(self.form_invalid(form))
+            return self.form_invalid(form)
+
+    # Получение URL для перенаправления после успешного добавления комментария
     def get_success_url(self, **kwargs):
         return reverse_lazy('detail_page', kwargs={'pk': self.object.article.id})
 
+    # Получение объекта поста
     def get_object(self, queryset=None):
         return get_object_or_404(Post, pk=self.kwargs['pk'])
 
+    # Получение контекста страницы, включая комментарии и сортировка комментариев
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -184,41 +181,7 @@ class DetailListView(FormMixin, DetailView):
         return context
 
 
-    # def post(self, request, *args, **kwargs):
-    #     form = self.get_form()
-    #     if form.is_valid():
-    #         # Проверка CAPTCHA
-    #         if not form.cleaned_data['captcha'].is_valid:
-    #             return self.form_invalid(form)
-    #
-    #         self.object = form.save(commit=False)
-    #         self.object.article = self.get_object()
-    #         self.object.author = self.request.user
-    #         self.object.save()
-    #
-    #         return self.form_valid(form)
-    #     else:
-    #         return self.form_invalid(form)
-
-    # def post(self, request, *args, **kwargs):
-    #     form = self.get_form()
-    #     if form.is_valid():
-    #         # Проверка CAPTCHA
-    #         if not form.cleaned_data['captcha'][0].is_valid:
-    #
-    #             return self.form_invalid(form)
-    #
-    #         return self.form_valid(form)
-    #     else:
-    #         return self.form_invalid(form)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['comments'] = self.object.comments_articles.all().order_by('-created_at')
-    #     return context
-
-
-
+# Регистрация нового пользователя
 class RegisterUserView(CreateView):
     model = CustomUser
     template_name = 'comments/register_page.html'
@@ -236,9 +199,11 @@ class RegisterUserView(CreateView):
         return form_valid
 
 
+
+
+# для API
 # def commentary_app(request):
 #     return render(request, 'comments/home.html')
-
 
 # def rec_comm_app(request):
 #     return render(request, 'comments/home.html')

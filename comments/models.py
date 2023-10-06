@@ -9,6 +9,7 @@ from captcha.fields import CaptchaField
 from django.contrib.auth import get_user_model
 
 
+# Функция для определения пути сохранения файлов пользователя
 def user_file_path(instance, filename):
     user_id_name = str(instance.author.id) + str(instance.author.username)
 
@@ -24,7 +25,7 @@ def user_file_path(instance, filename):
     return f'{upload_to}{user_id_name}/{post_id}/{filename}'
 
 
-
+# Модель пользователя расширенная
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, default='avatars/No_image.png')
     home_page = models.URLField(max_length=255, blank=True, null=True, verbose_name="Home Page", )
@@ -38,8 +39,7 @@ class CustomUser(AbstractUser):
         return 'media/avatars/No_image.png'
 
 
-
-
+# Модель для хранения постов
 class Post(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="author_article", blank=True,
                                null=True, )
@@ -83,7 +83,7 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
 
-
+# Модель для хранения комментариев
 class Commentary(models.Model):
     article = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name="Article", blank=True, null=True,
                                 related_name='comments_articles')

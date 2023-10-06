@@ -6,7 +6,7 @@ from django.forms import ModelForm, TextInput, Textarea, EmailInput, PasswordInp
 from captcha.fields import CaptchaField
 
 
-
+# Форма аутентификации пользователей при входе в систему
 class AuthUserForm(AuthenticationForm, ModelForm):
     class Meta:
         model = CustomUser
@@ -14,10 +14,11 @@ class AuthUserForm(AuthenticationForm, ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        #  Для каждого поля устанавливается атрибут CSS класса "form-control", чтобы изменить стиль на требуемый
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
-
+# Форма создания комментариев
 class CommentaryForm(ModelForm):
 
     class Meta:
@@ -32,11 +33,11 @@ class CommentaryForm(ModelForm):
 
 
 
-
+# Форма наследуется от CommentaryForm и добавляет CAPTCHA
 class CommentaryWithCaptchaForm(CommentaryForm):
     captcha = CaptchaField()
 
-
+# Форма регистрации новых пользователей
 class RegisterUserForm(ModelForm):
     class Meta:
         model = CustomUser
@@ -56,7 +57,7 @@ class RegisterUserForm(ModelForm):
 
 
 
-
+# Форма создания и редактирования статей
 class PostForm(ModelForm):
     class Meta:
         model = Post
@@ -69,6 +70,8 @@ class PostForm(ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
 
 
+
+# для API
 # class PostForm(ModelForm):
 #     class Meta:
 #         model = Post

@@ -1,5 +1,4 @@
 
-
 {% extends 'base.html' %}
 
 {% block title %}
@@ -7,8 +6,6 @@
 {% endblock title %}
 
 {% block content %}
-
-
 
 
     <div>
@@ -38,73 +35,6 @@
     </div>
 
 
-
-    {#    <div>#}
-    {##}
-    {#        {% for el in data.post %}#}
-    {#            <div id="{{ el.id }}" class="post">#}
-    {#                <div class="alert alert-secondary">#}
-    {#                    <h3> {{ el.title }} </h3>#}
-    {#                </div>#}
-    {#                <button data-binding="{{ el.id }}" class="btn btn-secondary open-popup"> Коментировать</button>#}
-    {#            </div>#}
-    {#            <div class="back-com">#}
-    {#                {% for rv in data.commentary %}#}
-    {#                    {% if rv.binding == el.id %}#}
-    {#                        <div id="{{ rv.id }}" class="comment-container">#}
-    {#                            {% if rv.binding_com != None %}#}
-    {#                                {% for prv in data.commentary %}#}
-    {#                                    {% if prv.id == rv.binding_com %}#}
-    {#                                        <p class="back-com-par"> {{ prv.text }}</p>#}
-    {#                                    {% endif %}#}
-    {#                                {% endfor %}#}
-    {#                            {% endif %}#}
-    {#                            <p class="comm-text"> {{ rv.text }} </p>#}
-    {#                            <button data-binding="{{ el.id }}" data-binding-com="{{ rv.id }}"#}
-    {#                                    class="btn btn-secondary open-popup"> Ответить#}
-    {#                            </button>#}
-    {#                        </div>#}
-    {#                    {% endif %}#}
-    {#                {% endfor %}#}
-    {#            </div>#}
-    {#        {% endfor %}#}
-    {#    </div>#}
-
-
-
-
-
-
-
-    {#        <div>#}
-    {#            <h2> Posts </h2>#}
-    {#            {% verbatim %}#}
-    {#            <div class="container" id="post_app">#}
-    {##}
-    {#                <div class="post" v-for="post in posts">#}
-    {#                    <div class="alert alert-secondary">#}
-    {#                        <h3> {{ post.title }} </h3>#}
-    {#                        <h4 style="text-align: right;"> {{ post.author_username }}</h4>#}
-    {#                    </div>#}
-    {#                    <p class="text-post"> {{ post.text }} </p>#}
-    {#                </div>#}
-    {##}
-    {#            </div>#}
-    {#            {% endverbatim %}#}
-    {#            <h2> Commentaries </h2>#}
-    {##}
-    {##}
-    {#            {% verbatim %}#}
-    {#            <div class="container" id="comm_app">#}
-    {#                <div v-for="commentary in commentaries">#}
-    {#                    <p>{{ commentary.id }}</p>#}
-    {#                    <p>{{ commentary.id_list }}</p>#}
-    {#                </div>#}
-    {#            </div>#}
-    {#            {% endverbatim %}#}
-    {#        </div>#}
-
-
     <div id="myPopup" class="popup">
         <div class="popup-content">
             <div class="form-create-post">
@@ -123,12 +53,6 @@
             <button id="closePopup" class="btn btn-secondary">Закрыть</button>
         </div>
     </div>
-
-
-
-
-
-
 
 
 {% endblock content %}

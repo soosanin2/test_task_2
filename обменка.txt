@@ -229,3 +229,334 @@ window.addEventListener('click', function (event) {
         myPopup.classList.remove('show');
 
 
+
+
+
+
+
+
+
+
+
+
+home.html
+
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Главная
+{% endblock title %}
+
+{% block content %}
+
+    <div>
+        <h2> Posts </h2>
+        {% verbatim %}
+        <div class="container" id="post_app">
+
+            <div class="post" v-for="post in posts">
+                <div class="alert alert-secondary">
+                    <h3> {{ post.title }} </h3>
+                    <h4 style="text-align: right;"> {{ post.author_username }}</h4>
+                </div>
+                <p class="text-post"> {{ post.text }} </p>
+            </div>
+
+        </div>
+        {% endverbatim %}
+        <h2> Commentaries </h2>
+        {% verbatim %}
+        <div class="container" id="comm_app">
+            <div v-for="commentary in commentaries">
+
+                <h3 class="name-user"> {{ commentary.author_username }} </h3>
+
+                <p class="data-comm"> {{ commentary.created_at }} </p>
+            </div>
+        </div>
+        {% endverbatim %}
+    </div>
+
+
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <div class="form-create-post">
+                <h3> Комментарий </h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ data.fdata.form.binding }}
+                    {{ data.fdata.form.binding_com }}
+                    {{ data.fdata.form.captcha }}<br>
+                    {{ data.fdata.form.text }}<br>
+                    <span>{{ error }}</span>
+                    <button class="btn btn-secondary" id='submitComit' type="submit">Оставить комментарий</button>
+                </form>
+            </div>
+            <br>
+            <button id="closePopup" class="btn btn-secondary">Закрыть</button>
+        </div>
+    </div>
+
+    <div>
+        {% if data.post %}
+            {% for el in data.post %}
+                <div id="{{ el.id }}" class="post">
+                    <div class="alert alert-secondary">
+                        <h3> {{ el.title }} </h3>
+                        <h4 style="text-align: right;"> {{ el.author }}</h4>
+                    </div>
+
+                    <p class="text-post"> {{ el.text }} </p>
+
+                    <button data-binding="{{ el.id }}" class="btn btn-secondary open-popup"> Коментировать</button>
+                </div>
+
+                <div class="back-com">
+                    {% if data.commentary %}
+                        {% for rv in data.commentary %}
+
+                            {% if rv.binding == el.id %}
+
+                                <div id="{{ rv.id }}" class="comment-container">
+                                    <div class="header-comm">
+                                        <img class="avatar" src="{{ rv.user.get_avatar_url }}" alt="Avatar" width="50">
+                                        {% if rv.user.home_page %}
+                                            <a href="{{ rv.user.home_page }}">
+                                                <h3 class="name-user"> {{ rv.user.username }} </h3>
+                                            </a>
+                                        {% else %}
+                                            <h3 class="name-user"> {{ rv.user.username }} </h3>
+                                        {% endif %}
+                                        <p class="data-comm"> {{ rv.created_at|date:"d.m.y" }}
+                                            в {{ rv.created_at|date:"H:i" }} </p>
+                                        <div class="icon-container">
+                                            <i class="fa-solid fa-hashtag icon"></i>
+                                            <i class="fa-regular fa-bookmark icon"></i>
+                                            <i class="fa-solid fa-code-branch icon"></i>
+                                            <i class="fa-regular fa-circle-up icon"></i>
+                                        </div>
+                                        <p></p>
+                                        <p>rating</p>
+                                    </div>
+
+                                    {% if rv.binding_com != None %}
+                                        {% for prv in data.commentary %}
+                                            {% if prv.id == rv.binding_com %}
+                                                <p class="back-com-par"> родительский ком - {{ prv.text }}</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <p class="comm-text"> {{ rv.text }} </p>
+                                    <button data-binding="{{ el.id }}" data-binding-com="{{ rv.id }}"
+                                            class="btn btn-secondary open-popup"> Ответить
+                                    </button>
+
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                    {% else %}
+                        <div class="comment-container">
+                            <p> Нет комментариев </p>
+                        </div>
+                    {% endif %}
+                </div>
+
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-secondary">
+                <h3> Нет новостей </h3>
+            </div>
+        {% endif %}
+    </div>
+
+
+
+    main.js
+var openButtons = document.querySelectorAll('.open-popup');
+var myPopup = document.getElementById('myPopup');
+var bindingField = document.querySelector('#myPopup [name="binding"]');
+var bindingFieldCom = document.querySelector('#myPopup [name="binding_com"]');
+
+openButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+        var bindingValue = button.getAttribute('data-binding');
+        var bindingValueCom = button.getAttribute('data-binding-com');
+        bindingField.value = bindingValue;
+        bindingFieldCom.value = bindingValueCom;
+        myPopup.classList.add('show');
+    });
+});
+
+var closePopup = document.getElementById('closePopup');
+closePopup.addEventListener('click', function () {
+    myPopup.classList.remove('show');
+});
+var submitComit = document.getElementById('submitComit');
+submitComit.addEventListener('click', function () {
+  location.reload();
+});
+
+window.addEventListener('click', function (event) {
+    if (event.target == myPopup) {
+        myPopup.classList.remove('show');
+    }
+});
+
+
+
+{#{% block content %}#}
+{#    <div class="comments">#}
+{#        {% for comm in comments %}#}
+{#            <div class="comment-container">#}
+{#                <!-- Ваш код для отображения комментария -->#}
+{#                <p>{{ comm.text }}</p>#}
+{#                <button data-comment-id="{{ comm.id }}" class="btn btn-secondary reply-button">#}
+{#                    Ответить#}
+{#                </button>#}
+{##}
+{#                <!-- Рекурсивный вызов для ответов на этот комментарий -->#}
+{#                {% comments_for_parent comments comm.id %}#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#{% endblock %}#}
+
+
+{% for comm in comments %}
+    <div class="comment-container">
+        <!-- Ваш код для отображения комментария -->
+        <p>{{ comm.text }}</p>
+        <button data-comment-id="{{ comm.id }}" class="btn btn-secondary reply-button">
+            Ответить
+        </button>
+
+        <!-- Условный блок для отображения вложенных комментариев -->
+        {% if comm.has_children %}
+            <div class="nested-comments">
+                {% comments_for_parent comments comm.id %}
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+
+
+
+
+
+{% with div_id=div.id %}
+    {% for comm in comments %}
+    <div id="{{ comm.id }}">
+         {% if comm.binding_com == div_id %}
+               текст
+         {% endif %}
+    </div>
+    {% endfor %}
+{% endwith %}
+
+
+
+
+
+class DetailListView(FormMixin, DetailView):
+    model = Post
+    template_name = 'comments/detail_page.html'
+    context_object_name = "get_article"
+    form_class = CommentaryForm
+
+
+    # def post(self, request, *args, **kwargs):
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         # Проверка CAPTCHA
+    #         if not form.cleaned_data['captcha'].is_valid:
+    #
+    #             return self.form_invalid(form)
+    #
+    #         return self.form_valid(form)
+    #     else:
+    #         return self.form_invalid(form)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+#     def post(self, request, *args, **kwargs):
+#         form = self.get_form()
+#         if form.is_valid():
+#             # Проверка CAPTCHA
+#             if not form.cleaned_data['captcha'].is_valid:
+#
+#                 return self.form_invalid(form)
+#
+#             return self.form_valid(form)
+#         else:
+#             return self.form_invalid(form)
+
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.article = self.get_object()
+        self.object.author = self.request.user
+        self.object.save()
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('detail_page', kwargs={'pk': self.object.article.id})
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post, pk=self.kwargs['pk'])
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        sort_order = self.request.GET.get('sort_order', 'newest')
+
+        if sort_order == 'oldest':
+            comments = self.object.comments_articles.all().order_by('created_at')
+
+        elif sort_order == 'newest':
+            comments = self.object.comments_articles.all().order_by('-created_at')
+
+        elif sort_order == 'authorA':
+            comments = self.object.comments_articles.all().order_by('-author__username')
+
+        elif sort_order == 'authorZ':
+            comments = self.object.comments_articles.all().order_by('author__username')
+
+        elif sort_order == 'emailA':
+            comments = self.object.comments_articles.all().order_by('author__email')
+
+        elif sort_order == 'emailZ':
+            comments = self.object.comments_articles.all().order_by('-author__email')
+
+        page = self.request.GET.get('page')
+        paginator = Paginator(comments, 25)
+
+        try:
+            comments = paginator.page(page)
+        except PageNotAnInteger:
+            comments = paginator.page(1)
+
+        except EmptyPage:
+            comments = paginator.page(paginator.num_pages)
+
+        context['comments'] = comments
+        context['sort_order'] = sort_order
+
+        return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['comments'] = self.object.comments_articles.all().order_by('-created_at')
+    #     return context

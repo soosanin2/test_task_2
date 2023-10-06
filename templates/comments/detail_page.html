@@ -10,19 +10,6 @@
 {% block content %}
 
 
-    {#    <div class="comments">#}
-    {#        {% for comm in comments %}#}
-    {#            <div class="comment-container">#}
-    {#                <p>{{ comm.text }}</p>#}
-    {#                <button data-comment-id="{{ comm.id }}" class="btn btn-secondary reply-button">#}
-    {#                    Ответить#}
-    {#                </button>#}
-    {##}
-    {#                {% comments_for_parent comments comm.id %}#}
-    {#            </div>#}
-    {#        {% endfor %}#}
-    {#    </div>#}
-
     <div>
 
         <div class="post-container">
@@ -159,11 +146,6 @@
                                                     </div>
 
                                                     <p class="comm-text"> {{ rev.text|safe }} </p>
-                                                    {#                                                    <button data-article-id="{{ rev.text }}"#}
-                                                    {#                                                            class="btn btn-secondary open-reply-popup">#}
-                                                    {#                                                        Ответить#}
-                                                    {#                                                                                                        </button>#}
-
                                                 </div>
 
                                             {% endif %}
@@ -178,6 +160,21 @@
             </div>
         </div>
     </div>
+
+
+{#набросок для каскадного отображения коментариев с помощью рекурсии#}
+    {#    <div class="comments">#}
+    {#        {% for comm in comments %}#}
+    {#            <div class="comment-container">#}
+    {#                <p>{{ comm.text }}</p>#}
+    {#                <button data-comment-id="{{ comm.id }}" class="btn btn-secondary reply-button">#}
+    {#                    Ответить#}
+    {#                </button>#}
+    {##}
+    {#                {% comments_for_parent comments comm.id %}#}
+    {#            </div>#}
+    {#        {% endfor %}#}
+    {#    </div>#}
 
 
     <div id="replyPopup" class="popup">
